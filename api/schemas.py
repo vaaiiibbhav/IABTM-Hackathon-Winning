@@ -154,6 +154,22 @@ class FeedResponse(BaseModel):
     saturated: bool
 
 
+class Metric(BaseModel):
+    """A single §10 tile value plus the human-readable reason it's at that value."""
+
+    value: float
+    driver: str
+
+
+class RiskLikeState(BaseModel):
+    """The four §10 tiles, replacing burnout/focus: Alignment/Momentum/Saturation/Drift."""
+
+    alignment: Metric
+    momentum: Metric
+    saturation: Metric
+    drift: Metric
+
+
 class SelfState(BaseModel):
     """The one fat object §9 says to fetch — no chatty per-field endpoints."""
 
@@ -161,7 +177,7 @@ class SelfState(BaseModel):
     aspirations: list[Aspiration]
     themes: list[Theme]
     today_budget_minutes: int
-    drift_score: float
+    risk_like_state: RiskLikeState
     recent_decisions: list[Decision]
 
 

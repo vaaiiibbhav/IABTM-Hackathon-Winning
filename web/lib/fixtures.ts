@@ -12,6 +12,8 @@ import type {
   Decision,
   FeedItem,
   FeedResponse,
+  Intervention,
+  RiskLikeState,
   SelfState,
   Theme,
 } from "./types";
@@ -113,6 +115,62 @@ export const fixtureCandidates: Record<string, Candidate> = {
     verified: true,
     appraised_at: NOW,
   },
+  clickbaitTedTricks: {
+    id: "cand_ted_tricks",
+    theme_id: "th_public_speaking",
+    kind: "video",
+    title: "5 TED TALK TRICKS THAT MAKE YOU SOUND SMART INSTANTLY",
+    url: "https://example.com/ted-tricks",
+    provider: "YouTube",
+    minutes: 6,
+    depth: 1,
+    has_practice: false,
+    view_count: 1_800_000,
+    verified: true,
+    appraised_at: NOW,
+  },
+  stagePresenceBook: {
+    id: "cand_stage_presence",
+    theme_id: "th_public_speaking",
+    kind: "book",
+    title: "Presence: Bringing Your Boldest Self to Your Biggest Challenges",
+    url: "https://example.com/presence-book",
+    provider: "IABTM",
+    minutes: 40,
+    depth: 2,
+    has_practice: true,
+    view_count: 21_000,
+    verified: true,
+    appraised_at: NOW,
+  },
+  improvGamesPractice: {
+    id: "cand_improv_games",
+    theme_id: "th_public_speaking",
+    kind: "experience",
+    title: "Local Improv Jam — Drop-in Practice Night",
+    url: "https://example.com/improv-jam",
+    provider: "IABTM",
+    minutes: 60,
+    depth: 2,
+    has_practice: true,
+    view_count: 900,
+    verified: true,
+    appraised_at: NOW,
+  },
+  distributedSystemsTalk: {
+    id: "cand_distsys_talk",
+    theme_id: "th_systems_design",
+    kind: "video",
+    title: "Consensus, Explained: A Talk on Distributed Systems Fundamentals",
+    url: "https://example.com/distsys-talk",
+    provider: "Farnam Street",
+    minutes: 28,
+    depth: 3,
+    has_practice: false,
+    view_count: 65_000,
+    verified: true,
+    appraised_at: NOW,
+  },
 };
 
 export const fixtureDecisions: Decision[] = [
@@ -151,8 +209,27 @@ export const fixtureDecisions: Decision[] = [
       saturation_penalty: 0.1,
       score: 0.55,
     },
-    counterfactual_id: null,
-    counterfactual_score: null,
+    counterfactual_id: "cand_distsys_talk",
+    counterfactual_score: 0.31,
+  },
+  {
+    id: "dec_3",
+    user_id: "u_demo",
+    candidate_id: "cand_vocal_variety",
+    served_at: NOW,
+    growth_score: 0.61,
+    breakdown: {
+      alignment: 0.88,
+      readiness: 0.7,
+      actionability: 1,
+      novelty: 0.5,
+      effort_fit: 0.8,
+      trust_weight: 0.8,
+      saturation_penalty: 0.2,
+      score: 0.61,
+    },
+    counterfactual_id: "cand_ted_tricks",
+    counterfactual_score: 0.89,
   },
 ];
 
@@ -166,8 +243,14 @@ export const fixtureFeed: FeedItem[] = [
   {
     candidate: fixtureCandidates.replicationNotes,
     breakdown: fixtureDecisions[1].breakdown,
-    counterfactual_candidate: null,
-    counterfactual_engagement_score: null,
+    counterfactual_candidate: fixtureCandidates.distributedSystemsTalk,
+    counterfactual_engagement_score: 0.31,
+  },
+  {
+    candidate: fixtureCandidates.vocalVarietyDrill,
+    breakdown: fixtureDecisions[2].breakdown,
+    counterfactual_candidate: fixtureCandidates.clickbaitTedTricks,
+    counterfactual_engagement_score: 0.89,
   },
 ];
 
@@ -178,11 +261,63 @@ export const fixtureFeedResponse: FeedResponse = {
   saturated: false,
 };
 
+export const fixtureRiskLikeState: RiskLikeState = {
+  alignment: {
+    value: 0.42,
+    driver: "62% of this week's engagement was Systems Design, not the stated Public Speaking aspiration",
+  },
+  momentum: {
+    value: 0.74,
+    driver: "Systems Design carrying the week — 4 completions, 1 acted on",
+  },
+  saturation: {
+    value: 0.3,
+    driver: "Systems Design: 3 items consumed since Tuesday, 0 acted on",
+  },
+  drift: {
+    value: 0.67,
+    driver: "4x more engagement with Systems Design than Public Speaking over the last 6 weeks",
+  },
+};
+
+export const fixtureInterventions: Intervention[] = [
+  {
+    id: "int_drift_1",
+    user_id: "u_demo",
+    type: "drift_proposal",
+    tier: 2,
+    body: "Six weeks ago you said \"become a confident public speaker.\" Since then you've engaged 4x more with Systems Design material and skipped 5 speaking items. Has your aspiration changed?",
+    state: {
+      options: [
+        { label: "Update it", value: "accept" },
+        { label: "No, hold me to it", value: "reject" },
+      ],
+    },
+    sent_at: NOW,
+    resolved_at: null,
+  },
+  {
+    id: "int_calibration_1",
+    user_id: "u_demo",
+    type: "calibration",
+    tier: 1,
+    body: "I'm not confident whether your Systems Design engagement is a genuine shift in what you want, or just what's convenient this week. Which is it?",
+    state: {
+      options: [
+        { label: "Genuine shift", value: "genuine" },
+        { label: "Just convenient — keep pushing speaking", value: "convenient" },
+      ],
+    },
+    sent_at: NOW,
+    resolved_at: null,
+  },
+];
+
 export const fixtureSelfState: SelfState = {
   user_id: "u_demo",
   aspirations: fixtureAspirations,
   themes: fixtureThemes,
   today_budget_minutes: 45,
-  drift_score: 0.67,
+  risk_like_state: fixtureRiskLikeState,
   recent_decisions: fixtureDecisions,
 };

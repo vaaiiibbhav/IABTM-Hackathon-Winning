@@ -138,13 +138,27 @@ export interface FeedResponse {
   saturated: boolean;
 }
 
+// A single §10 tile value plus the human-readable reason it's at that value
+export interface Metric {
+  value: number;
+  driver: string;
+}
+
+// The four §10 tiles, replacing burnout/focus: Alignment/Momentum/Saturation/Drift
+export interface RiskLikeState {
+  alignment: Metric;
+  momentum: Metric;
+  saturation: Metric;
+  drift: Metric;
+}
+
 // The one fat object §9 says to fetch — no chatty per-field endpoints
 export interface SelfState {
   user_id: string;
   aspirations: Aspiration[];
   themes: Theme[];
   today_budget_minutes: number;
-  drift_score: number;
+  risk_like_state: RiskLikeState;
   recent_decisions: Decision[];
 }
 
