@@ -16,6 +16,70 @@ from api.models import DbUser, DbSelfSpec, DbTheme, DbDecision, DbCandidate, DbS
 router = APIRouter(prefix="/api/feed", tags=["Feed"])
 
 
+async def resolve_feed_item(db: AsyncSession, dec: DbDecision) -> FeedItem | None:
+    """Resolve a DbDecision row into a FeedItem (candidate + breakdown + counterfactual).
+
+    Shared with the decisions log route (api/routes/decisions.py) so the
+    candidate/breakdown mapping lives in exactly one place.
+    """
+    cand = await db.get(DbCandidate, dec.candidate_id)
+    if not cand:
+        return None
+
+    cand_schema = Candidate(
+        id=cand.id,
+        theme_id=cand.theme_id,
+        kind=cand.kind,
+        title=cand.title,
+        url=cand.url,
+        provider=cand.provider,
+        minutes=cand.minutes,
+        depth=cand.depth,
+        has_practice=cand.has_practice,
+        view_count=cand.view_count,
+        verified=cand.verified,
+        appraised_at=cand.appraised_at
+    )
+
+    cf_cand_schema = None
+    if dec.counterfactual_id:
+        cf = await db.get(DbCandidate, dec.counterfactual_id)
+        if cf:
+            cf_cand_schema = Candidate(
+                id=cf.id,
+                theme_id=cf.theme_id,
+                kind=cf.kind,
+                title=cf.title,
+                url=cf.url,
+                provider=cf.provider,
+                minutes=cf.minutes,
+                depth=cf.depth,
+                has_practice=cf.has_practice,
+                view_count=cf.view_count,
+                verified=cf.verified,
+                appraised_at=cf.appraised_at
+            )
+
+    b = dec.breakdown
+    breakdown_schema = ScoreBreakdown(
+        alignment=b.get("alignment", 0.0),
+        readiness=b.get("readiness", 0.0),
+        actionability=b.get("actionability", 0.0),
+        novelty=b.get("novelty", 0.0),
+        effort_fit=b.get("effort_fit", 0.0),
+        trust_weight=b.get("trust_weight", 1.0),
+        saturation_penalty=b.get("saturation_penalty", 0.0),
+        score=dec.growth_score
+    )
+
+    return FeedItem(
+        candidate=cand_schema,
+        breakdown=breakdown_schema,
+        counterfactual_candidate=cf_cand_schema,
+        counterfactual_engagement_score=dec.counterfactual_score
+    )
+
+
 @router.get("/{user_id}", response_model=FeedResponse)
 async def get_daily_feed(user_id: str, db: AsyncSession = Depends(get_db)):
     """Assemble today's bounded feed and counterfactuals. Runs agent nodes synchronously."""
@@ -68,67 +132,9 @@ async def get_daily_feed(user_id: str, db: AsyncSession = Depends(get_db)):
     # Map database rows to schemas
     feed_items: list[FeedItem] = []
     for dec in decisions:
-        # Fetch candidate
-        cand = await db.get(DbCandidate, dec.candidate_id)
-        if not cand:
-            continue
-            
-        cand_schema = Candidate(
-            id=cand.id,
-            theme_id=cand.theme_id,
-            kind=cand.kind,
-            title=cand.title,
-            url=cand.url,
-            provider=cand.provider,
-            minutes=cand.minutes,
-            depth=cand.depth,
-            has_practice=cand.has_practice,
-            view_count=cand.view_count,
-            verified=cand.verified,
-            appraised_at=cand.appraised_at
-        )
-
-        # Fetch counterfactual candidate
-        cf_cand_schema = None
-        if dec.counterfactual_id:
-            cf = await db.get(DbCandidate, dec.counterfactual_id)
-            if cf:
-                cf_cand_schema = Candidate(
-                    id=cf.id,
-                    theme_id=cf.theme_id,
-                    kind=cf.kind,
-                    title=cf.title,
-                    url=cf.url,
-                    provider=cf.provider,
-                    minutes=cf.minutes,
-                    depth=cf.depth,
-                    has_practice=cf.has_practice,
-                    view_count=cf.view_count,
-                    verified=cf.verified,
-                    appraised_at=cf.appraised_at
-                )
-
-        # Map breakdown dictionary
-        b = dec.breakdown
-        breakdown_schema = ScoreBreakdown(
-            alignment=b.get("alignment", 0.0),
-            readiness=b.get("readiness", 0.0),
-            actionability=b.get("actionability", 0.0),
-            novelty=b.get("novelty", 0.0),
-            effort_fit=b.get("effort_fit", 0.0),
-            trust_weight=b.get("trust_weight", 1.0),
-            saturation_penalty=b.get("saturation_penalty", 0.0),
-            score=dec.growth_score
-        )
-
-        feed_items.append(
-            FeedItem(
-                candidate=cand_schema,
-                breakdown=breakdown_schema,
-                counterfactual_candidate=cf_cand_schema,
-                counterfactual_engagement_score=dec.counterfactual_score
-            )
-        )
+        item = await resolve_feed_item(db, dec)
+        if item:
+            feed_items.append(item)
 
     return FeedResponse(
         user_id=user_id,

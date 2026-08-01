@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.database import init_db
-from api.routes import self, feed, signals, interventions, demo
+from api.routes import self, feed, signals, interventions, demo, decisions
 
 
 @asynccontextmanager
@@ -42,6 +42,7 @@ app.include_router(feed.router)
 app.include_router(signals.router)
 app.include_router(interventions.router)
 app.include_router(demo.router)
+app.include_router(decisions.router)
 
 
 @app.get("/api/health")

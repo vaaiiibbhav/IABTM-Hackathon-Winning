@@ -17,7 +17,7 @@ export default function TodayPage() {
   const [isSaturated, setIsSaturated] = useState(false);
   const [activeIntervention, setActiveIntervention] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
-  const [useMock, setUseMock] = useState(true); // Default to mock, toggle to live
+  const [useMock, setUseMock] = useState(false); // Default to live backend, falls back to mock on failure
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [completedItems, setCompletedItems] = useState<Record<string, boolean>>({});
   const [showReflection, setShowReflection] = useState<string | null>(null);
@@ -150,7 +150,7 @@ export default function TodayPage() {
     try {
       await fetch("/api/signal", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-User-Id": userId ?? "" },
         body: JSON.stringify({
           candidate_id: candidateId,
           kind: "reflected",
@@ -169,7 +169,7 @@ export default function TodayPage() {
     try {
       await fetch("/api/signal", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-User-Id": userId ?? "" },
         body: JSON.stringify({
           candidate_id: candidateId,
           kind: "acted",
@@ -481,7 +481,7 @@ export default function TodayPage() {
               Time Travel Demo
             </h3>
             <p className="text-[10px] text-zinc-500 leading-relaxed">
-              Use this switch to fast-forward time. Praxis will decay learning parameters, check for inactivity stalls, and flag theme saturation (Moat 2).
+              Use this switch to fast-forward time. Praxis will age your engagement data, flag stretches of inactivity, and notice if you&apos;ve been consuming a lot on one theme without acting on any of it.
             </p>
             
             <button

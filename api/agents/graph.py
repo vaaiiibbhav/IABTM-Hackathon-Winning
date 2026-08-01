@@ -7,6 +7,7 @@ and handles database state transitions. Emits SSE trace telemetry.
 import time
 import uuid
 import asyncio
+from datetime import datetime
 from typing import TypedDict, List, Optional, Any
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -64,7 +65,7 @@ async def intake_node(state: AgentGraphState) -> AgentGraphState:
         db_user = DbUser(
             id=user_id,
             name=payload.get("name", "User"),
-            email=payload.get("email", "user@example.com"),
+            email=payload.get("email") or f"{user_id}@praxis.local",
             timezone=payload.get("timezone", "UTC"),
             created_at=clock.now()
         )
@@ -300,8 +301,26 @@ async def scorer_node(state: AgentGraphState) -> AgentGraphState:
     # Stated aspirations embeddings (mocked target [0.8, 0.6, 0.0])
     aspiration_embedding = [0.8, 0.6, 0.0]
 
+    # Re-curating today re-runs this node (feed.py calls it on every GET) — reuse
+    # today's existing decision per candidate instead of inserting a fresh one,
+    # or every page load would duplicate the decision log.
+    now_time = clock.now()
+    today_start = datetime(now_time.year, now_time.month, now_time.day, tzinfo=now_time.tzinfo)
+    existing_res = await db_session.execute(
+        select(DbDecision).where(
+            DbDecision.user_id == user_id,
+            DbDecision.served_at >= today_start,
+        )
+    )
+    existing_by_candidate = {d.candidate_id: d for d in existing_res.scalars().all()}
+
     decisions_to_record = []
     for cand in candidates:
+        existing = existing_by_candidate.get(cand.id)
+        if existing:
+            decisions_to_record.append(existing)
+            continue
+
         # Score growth
         score, breakdown = growth_score(
             item_id=cand.id,
@@ -317,7 +336,7 @@ async def scorer_node(state: AgentGraphState) -> AgentGraphState:
             today_budget=self_spec.daily_minutes,
             history=history
         )
-        
+
         # Calculate adversarial engagement
         adv_score = engagement_score(
             title=cand.title,
@@ -546,7 +565,10 @@ async def execute_onboarding(user_id: str, answers: List[str], db_session: Async
         result={},
         errors=[]
     )
-    await graph.ainvoke(state)
+    final_state = await graph.ainvoke(state)
+    errors = final_state.get("errors")
+    if errors:
+        raise RuntimeError(f"Onboarding failed: {'; '.join(errors)}")
 
 
 async def execute_curation(user_id: str, db_session: AsyncSession):

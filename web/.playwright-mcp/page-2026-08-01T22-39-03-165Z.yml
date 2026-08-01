@@ -1,0 +1,334 @@
+- generic [ref=f17e1]:
+  - banner [ref=f17e2]:
+    - generic [ref=f17e3]:
+      - link "Praxis" [ref=f17e4] [cursor=pointer]:
+        - /url: /today
+      - navigation [ref=f17e5]:
+        - link "Today" [ref=f17e6] [cursor=pointer]:
+          - /url: /today
+        - link "Self Twin" [ref=f17e7] [cursor=pointer]:
+          - /url: /twin
+        - link "Why" [ref=f17e8] [cursor=pointer]:
+          - /url: /why
+  - main [ref=f17e10]:
+    - generic [ref=f17e11]:
+      - generic [ref=f17e12]:
+        - heading "Why" [level=1] [ref=f17e13]
+        - paragraph [ref=f17e14]: The decision log. Every item traces to arithmetic — nothing here is vibes.
+      - generic [ref=f17e15]:
+        - generic [ref=f17e16]: Live backend
+        - button "Toggle mode" [ref=f17e17]
+    - generic [ref=f17e18]:
+      - generic [ref=f17e19]:
+        - generic [ref=f17e20]:
+          - generic [ref=f17e21]:
+            - generic [ref=f17e22]: essay · Farnam Street
+            - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f17e23]'
+          - generic [ref=f17e24]:
+            - generic [ref=f17e25]: growth score
+            - generic [ref=f17e26]: "0.88"
+        - generic [ref=f17e27]:
+          - generic [ref=f17e28]:
+            - generic [ref=f17e29]: Alignment
+            - generic [ref=f17e30]: 100%
+          - generic [ref=f17e31]:
+            - generic [ref=f17e32]: Readiness
+            - generic [ref=f17e33]: 0%
+          - generic [ref=f17e34]:
+            - generic [ref=f17e35]: Actionability
+            - generic [ref=f17e36]: 100%
+          - generic [ref=f17e37]:
+            - generic [ref=f17e38]: Novelty
+            - generic [ref=f17e39]: 100%
+          - generic [ref=f17e40]:
+            - generic [ref=f17e41]: Effort fit
+            - generic [ref=f17e42]: 100%
+          - generic [ref=f17e43]:
+            - generic [ref=f17e44]: Trust weight
+            - generic [ref=f17e45]: 110%
+          - generic [ref=f17e46]:
+            - generic [ref=f17e47]: Saturation penalty
+            - generic [ref=f17e48]: "-0%"
+          - generic [ref=f17e49]:
+            - generic [ref=f17e50]: Score
+            - generic [ref=f17e51]: "+0.88"
+        - generic [ref=f17e52]:
+          - generic [ref=f17e53]: what it beat
+          - paragraph [ref=f17e54]:
+            - text: 10 PRODUCTIVITY HACKS THAT WILL CHANGE YOUR LIFE 🔥
+            - generic [ref=f17e55]: (engagement score 78%)
+      - generic [ref=f17e56]:
+        - generic [ref=f17e57]:
+          - generic [ref=f17e58]:
+            - generic [ref=f17e59]: essay · Farnam Street
+            - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f17e60]'
+          - generic [ref=f17e61]:
+            - generic [ref=f17e62]: growth score
+            - generic [ref=f17e63]: "0.88"
+        - generic [ref=f17e64]:
+          - generic [ref=f17e65]:
+            - generic [ref=f17e66]: Alignment
+            - generic [ref=f17e67]: 100%
+          - generic [ref=f17e68]:
+            - generic [ref=f17e69]: Readiness
+            - generic [ref=f17e70]: 0%
+          - generic [ref=f17e71]:
+            - generic [ref=f17e72]: Actionability
+            - generic [ref=f17e73]: 100%
+          - generic [ref=f17e74]:
+            - generic [ref=f17e75]: Novelty
+            - generic [ref=f17e76]: 100%
+          - generic [ref=f17e77]:
+            - generic [ref=f17e78]: Effort fit
+            - generic [ref=f17e79]: 100%
+          - generic [ref=f17e80]:
+            - generic [ref=f17e81]: Trust weight
+            - generic [ref=f17e82]: 110%
+          - generic [ref=f17e83]:
+            - generic [ref=f17e84]: Saturation penalty
+            - generic [ref=f17e85]: "-0%"
+          - generic [ref=f17e86]:
+            - generic [ref=f17e87]: Score
+            - generic [ref=f17e88]: "+0.88"
+        - generic [ref=f17e89]:
+          - generic [ref=f17e90]: what it beat
+          - paragraph [ref=f17e91]:
+            - text: 10 PRODUCTIVITY HACKS THAT WILL CHANGE YOUR LIFE 🔥
+            - generic [ref=f17e92]: (engagement score 78%)
+      - generic [ref=f17e93]:
+        - generic [ref=f17e94]:
+          - generic [ref=f17e95]:
+            - generic [ref=f17e96]: essay · Farnam Street
+            - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f17e97]'
+          - generic [ref=f17e98]:
+            - generic [ref=f17e99]: growth score
+            - generic [ref=f17e100]: "0.88"
+        - generic [ref=f17e101]:
+          - generic [ref=f17e102]:
+            - generic [ref=f17e103]: Alignment
+            - generic [ref=f17e104]: 100%
+          - generic [ref=f17e105]:
+            - generic [ref=f17e106]: Readiness
+            - generic [ref=f17e107]: 0%
+          - generic [ref=f17e108]:
+            - generic [ref=f17e109]: Actionability
+            - generic [ref=f17e110]: 100%
+          - generic [ref=f17e111]:
+            - generic [ref=f17e112]: Novelty
+            - generic [ref=f17e113]: 100%
+          - generic [ref=f17e114]:
+            - generic [ref=f17e115]: Effort fit
+            - generic [ref=f17e116]: 100%
+          - generic [ref=f17e117]:
+            - generic [ref=f17e118]: Trust weight
+            - generic [ref=f17e119]: 110%
+          - generic [ref=f17e120]:
+            - generic [ref=f17e121]: Saturation penalty
+            - generic [ref=f17e122]: "-0%"
+          - generic [ref=f17e123]:
+            - generic [ref=f17e124]: Score
+            - generic [ref=f17e125]: "+0.88"
+        - generic [ref=f17e126]:
+          - generic [ref=f17e127]: what it beat
+          - paragraph [ref=f17e128]:
+            - text: 10 PRODUCTIVITY HACKS THAT WILL CHANGE YOUR LIFE 🔥
+            - generic [ref=f17e129]: (engagement score 78%)
+      - generic [ref=f17e130]:
+        - generic [ref=f17e131]:
+          - generic [ref=f17e132]:
+            - generic [ref=f17e133]: essay · Farnam Street
+            - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f17e134]'
+          - generic [ref=f17e135]:
+            - generic [ref=f17e136]: growth score
+            - generic [ref=f17e137]: "0.88"
+        - generic [ref=f17e138]:
+          - generic [ref=f17e139]:
+            - generic [ref=f17e140]: Alignment
+            - generic [ref=f17e141]: 100%
+          - generic [ref=f17e142]:
+            - generic [ref=f17e143]: Readiness
+            - generic [ref=f17e144]: 0%
+          - generic [ref=f17e145]:
+            - generic [ref=f17e146]: Actionability
+            - generic [ref=f17e147]: 100%
+          - generic [ref=f17e148]:
+            - generic [ref=f17e149]: Novelty
+            - generic [ref=f17e150]: 100%
+          - generic [ref=f17e151]:
+            - generic [ref=f17e152]: Effort fit
+            - generic [ref=f17e153]: 100%
+          - generic [ref=f17e154]:
+            - generic [ref=f17e155]: Trust weight
+            - generic [ref=f17e156]: 110%
+          - generic [ref=f17e157]:
+            - generic [ref=f17e158]: Saturation penalty
+            - generic [ref=f17e159]: "-0%"
+          - generic [ref=f17e160]:
+            - generic [ref=f17e161]: Score
+            - generic [ref=f17e162]: "+0.88"
+        - generic [ref=f17e163]:
+          - generic [ref=f17e164]: what it beat
+          - paragraph [ref=f17e165]:
+            - text: 10 PRODUCTIVITY HACKS THAT WILL CHANGE YOUR LIFE 🔥
+            - generic [ref=f17e166]: (engagement score 78%)
+  - generic [active]:
+    - generic [ref=f17e189]:
+      - generic [ref=f17e190]:
+        - navigation [ref=f17e192]:
+          - button [disabled] [ref=f17e193]:
+            - img "previous" [ref=f17e194]
+          - generic [ref=f17e196]:
+            - generic [ref=f17e197]: 1/
+            - text: "2"
+          - button [ref=f17e198] [cursor=pointer]:
+            - img "next" [ref=f17e199]
+        - generic [ref=f17e202]:
+          - generic "Latest available version is detected (16.2.12)." [ref=f17e205]: Next.js 16.2.12
+          - generic [ref=f17e206]: Turbopack
+      - generic [ref=f17e207]:
+        - dialog "Console Error" [ref=f17e208]:
+          - generic [ref=f17e211]:
+            - generic [ref=f17e212]:
+              - generic [ref=f17e213]:
+                - generic [ref=f17e214]: Console Error
+                - generic [ref=f17e216]:
+                  - button "Copy Error Info" [ref=f17e217] [cursor=pointer]
+                  - button "No related documentation found" [disabled] [ref=f17e220]
+                  - button "Attach Node.js inspector" [ref=f17e223] [cursor=pointer]
+              - generic [ref=f17e232]: "Encountered two children with the same key, `cand_sd_1_897a7e`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version."
+            - generic [ref=f17e235]:
+              - paragraph [ref=f17e237]:
+                - text: Call Stack
+                - generic [ref=f17e238]: "23"
+              - generic [ref=f17e239]:
+                - generic [ref=f17e240]:
+                  - text: createConsoleError
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e241] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_0maxcm2._.js (2391:71)
+              - generic [ref=f17e244]:
+                - generic [ref=f17e245]:
+                  - text: handleConsoleError
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e246] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_0maxcm2._.js (3177:54)
+              - generic [ref=f17e249]:
+                - generic [ref=f17e250]:
+                  - text: console.error
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e251] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_0maxcm2._.js (3324:57)
+              - generic [ref=f17e254]:
+                - generic [ref=f17e255]:
+                  - text: <unknown>
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e256] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (4104:33)
+              - generic [ref=f17e259]:
+                - generic [ref=f17e260]:
+                  - text: runWithFiberInDEV
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e261] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (965:74)
+              - generic [ref=f17e264]:
+                - generic [ref=f17e265]:
+                  - text: warnOnInvalidKey
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e266] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (4103:21)
+              - generic [ref=f17e269]:
+                - generic [ref=f17e270]:
+                  - text: reconcileChildrenArray
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e271] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (4129:160)
+              - generic [ref=f17e274]:
+                - generic [ref=f17e275]:
+                  - text: reconcileChildFibersImpl
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e276] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (4236:51)
+              - generic [ref=f17e279]:
+                - generic [ref=f17e280]:
+                  - text: <unknown>
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e281] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (4261:39)
+              - generic [ref=f17e284]:
+                - generic [ref=f17e285]:
+                  - text: reconcileChildren
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e286] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (5898:51)
+              - generic [ref=f17e289]:
+                - generic [ref=f17e290]:
+                  - text: beginWork
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e291] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (6758:1573)
+              - generic [ref=f17e294]:
+                - generic [ref=f17e295]:
+                  - text: runWithFiberInDEV
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e296] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (965:74)
+              - generic [ref=f17e299]:
+                - generic [ref=f17e300]:
+                  - text: performUnitOfWork
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e301] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (9555:97)
+              - generic [ref=f17e304]:
+                - generic [ref=f17e305]:
+                  - text: workLoopSync
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e306] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (9449:40)
+              - generic [ref=f17e309]:
+                - generic [ref=f17e310]:
+                  - text: renderRootSync
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e311] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (9433:13)
+              - generic [ref=f17e314]:
+                - generic [ref=f17e315]:
+                  - text: performWorkOnRoot
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e316] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (9061:186)
+              - generic [ref=f17e319]:
+                - generic [ref=f17e320]:
+                  - text: performWorkOnRootViaSchedulerTask
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e321] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_react-dom_0-72scy._.js (10255:9)
+              - generic [ref=f17e324]:
+                - generic [ref=f17e325]:
+                  - text: MessagePort.performWorkUntilDeadline
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e326] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__next_dist_compiled_0x9e1bc._.js (2647:64)
+              - generic [ref=f17e329]:
+                - generic [ref=f17e330]: div
+                - text: <anonymous>
+              - generic [ref=f17e331]:
+                - generic [ref=f17e332]:
+                  - text: <unknown>
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e333] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/web_1_i3d9v._.js (676:254)
+              - generic [ref=f17e336]:
+                - generic [ref=f17e337]: Array.map
+                - text: <anonymous>
+              - generic [ref=f17e338]:
+                - generic [ref=f17e339]:
+                  - text: WhyPage
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e340] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/web_1_i3d9v._.js (676:33)
+              - generic [ref=f17e343]:
+                - generic [ref=f17e344]:
+                  - text: ClientPageRoot
+                  - button "Sourcemapping failed. Click to log cause of error." [ref=f17e345] [cursor=pointer]
+                - text: file:///D:/HBTM%20Hackathon/web/.next/dev/static/chunks/0aq__18_3dvv._.js (10377:50)
+          - generic [ref=f17e348]: "1"
+          - generic [ref=f17e349]: "2"
+        - contentinfo [ref=f17e350]:
+          - region "Error feedback" [ref=f17e351]:
+            - paragraph [ref=f17e352]:
+              - link "Was this helpful?" [ref=f17e353] [cursor=pointer]:
+                - /url: https://nextjs.org/telemetry#error-feedback
+            - button "Mark as helpful" [ref=f17e354] [cursor=pointer]
+            - button "Mark as not helpful" [ref=f17e358] [cursor=pointer]
+    - generic [ref=f17e171] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=f17e172]
+      - generic [ref=f17e176]:
+        - button "Open issues overlay" [ref=f17e177]:
+          - generic [ref=f17e178]:
+            - generic [ref=f17e179]: "1"
+            - generic [ref=f17e180]: "2"
+          - generic [ref=f17e181]:
+            - text: Issue
+            - generic [ref=f17e182]: s
+        - button "Collapse issues badge" [ref=f17e183]
+  - alert [ref=f17e186]

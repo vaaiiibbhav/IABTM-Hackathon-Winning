@@ -1,0 +1,92 @@
+- generic [ref=f16e1]:
+  - banner [ref=f16e2]:
+    - generic [ref=f16e3]:
+      - link "Praxis" [ref=f16e4] [cursor=pointer]:
+        - /url: /today
+      - navigation [ref=f16e5]:
+        - link "Today" [ref=f16e6] [cursor=pointer]:
+          - /url: /today
+        - link "Self Twin" [ref=f16e7] [cursor=pointer]:
+          - /url: /twin
+        - link "Why" [ref=f16e8] [cursor=pointer]:
+          - /url: /why
+  - generic [ref=f16e10]:
+    - generic [ref=f16e11]:
+      - generic [ref=f16e12]:
+        - generic [ref=f16e13]:
+          - generic [ref=f16e14]:
+            - heading "Decision of the Day" [level=2] [ref=f16e15]
+            - paragraph [ref=f16e16]: "Targeting: Systems Design & Public Speaking"
+          - generic [ref=f16e17]:
+            - generic [ref=f16e18]: "Mode: Live Backend"
+            - button "[Toggle Mode]" [active] [ref=f16e19]
+        - generic [ref=f16e20]:
+          - generic [ref=f16e198]:
+            - generic [ref=f16e199]:
+              - generic [ref=f16e200]:
+                - generic [ref=f16e201]: ESSAY • 22 MINS
+                - generic [ref=f16e202]:
+                  - generic [ref=f16e203]: Growth Score
+                  - generic [ref=f16e204]: "+0.88"
+              - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f16e205]'
+              - paragraph [ref=f16e206]: "Source: Farnam Street • Depth 3/3"
+              - generic [ref=f16e207]:
+                - generic [ref=f16e208]:
+                  - generic [ref=f16e209]: Alignment
+                  - text: "1.00"
+                - generic [ref=f16e210]:
+                  - generic [ref=f16e211]: Readiness
+                  - text: "0.00"
+                - generic [ref=f16e212]:
+                  - generic [ref=f16e213]: Actionable
+                  - text: "Yes"
+                - generic [ref=f16e214]:
+                  - generic [ref=f16e215]: Trust Wt
+                  - generic [ref=f16e216]: x1.1
+            - generic [ref=f16e217]:
+              - generic [ref=f16e218]:
+                - button "Complete" [ref=f16e219]
+                - button "Take Action" [ref=f16e220]
+              - button "[Why curated?]" [ref=f16e221]
+          - generic [ref=f16e224]:
+            - generic [ref=f16e225]:
+              - generic [ref=f16e226]:
+                - generic [ref=f16e227]: ESSAY • 22 MINS
+                - generic [ref=f16e228]:
+                  - generic [ref=f16e229]: Growth Score
+                  - generic [ref=f16e230]: "+0.88"
+              - 'heading "The Making of an Expert: 22 Minutes on Deliberate Practice" [level=3] [ref=f16e231]'
+              - paragraph [ref=f16e232]: "Source: Farnam Street • Depth 3/3"
+              - generic [ref=f16e233]:
+                - generic [ref=f16e234]:
+                  - generic [ref=f16e235]: Alignment
+                  - text: "1.00"
+                - generic [ref=f16e236]:
+                  - generic [ref=f16e237]: Readiness
+                  - text: "0.00"
+                - generic [ref=f16e238]:
+                  - generic [ref=f16e239]: Actionable
+                  - text: "Yes"
+                - generic [ref=f16e240]:
+                  - generic [ref=f16e241]: Trust Wt
+                  - generic [ref=f16e242]: x1.1
+            - generic [ref=f16e243]:
+              - generic [ref=f16e244]:
+                - button "Complete" [ref=f16e245]
+                - button "Take Action" [ref=f16e246]
+              - button "[Why curated?]" [ref=f16e247]
+        - generic [ref=f16e73]:
+          - paragraph [ref=f16e78]: The feed has ended for today.
+          - paragraph [ref=f16e79]: "\"We serve links to act, not scroll.\""
+      - generic [ref=f16e81]:
+        - heading "Time Travel Demo" [level=3] [ref=f16e82]
+        - paragraph [ref=f16e83]: Use this switch to fast-forward time. Praxis will age your engagement data, flag stretches of inactivity, and notice if you've been consuming a lot on one theme without acting on any of it.
+        - button "Advance 5 Days" [ref=f16e84]
+        - button "[Reset Onboarding]" [ref=f16e88]
+    - generic [ref=f16e89]:
+      - button "Agent Telemetry 0 frames" [ref=f16e90]:
+        - generic [ref=f16e91]: Agent Telemetry
+        - generic [ref=f16e98]: 0 frames
+      - generic [ref=f16e102]: Listening for agent triggers...
+  - button "Open Next.js Dev Tools" [ref=f16e114] [cursor=pointer]
+  - alert [ref=f16e118]

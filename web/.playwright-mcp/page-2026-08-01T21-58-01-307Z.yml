@@ -1,0 +1,25 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Praxis" [ref=e4] [cursor=pointer]:
+        - /url: /today
+      - navigation [ref=e5]:
+        - link "Today" [ref=e6] [cursor=pointer]:
+          - /url: /today
+        - link "Self Twin" [ref=e7] [cursor=pointer]:
+          - /url: /twin
+        - link "Why" [ref=e8] [cursor=pointer]:
+          - /url: /why
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - heading "Praxis" [level=1] [ref=e12]
+      - paragraph [ref=e13]: "\"Your attention is product. Your potential is purpose. Let's calibrate.\""
+    - generic [ref=e14]:
+      - generic [ref=e15]: Onboarding Interview • Step 1 of 4
+      - generic [ref=e20]:
+        - heading "Question 1" [level=3] [ref=e21]
+        - paragraph [ref=e22]: What is the primary skill, identity, or long-term aspiration you are trying to cultivate?
+        - generic [ref=e23]:
+          - textbox "Enter your aspiration..." [active] [ref=e24]
+          - button [ref=e25]
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]

@@ -178,6 +178,7 @@ Higgsfield is cinematic video/image generation, ~45s per generation. **Use the o
 2. **"Becoming" reveal — the headline use, ties directly to IABTM's own tagline.** A short cinematic mood-piece per aspiration *theme* ("systems design mastery" → focus and craft, atmospheric — never the user's face). Revealed at the first milestone under **"become the self you imagine."**
 3. **Per-theme cover art** — a consistent visual treatment for each theme card in the Self Twin grid, so the UI reads as art-directed rather than templated.
 4. **Promoted-item badge art** (only if §2.4's Growth Hive ships) — visual distinction for items the Hive has promoted.
+5. **Ambient background loop** — a short, subtle looping video for the landing page and/or `/twin` hero background, atmospheric not distracting. Same rule as everything else here: pre-generated, static file, zero live calls.
 
 **All four are pre-generated for the demo's known seed scenarios** (the same 4–5 goals you're already pre-warming YouTube's cache for in BUILD_ORDER.md Phase 5 — extend that one pre-warm step to also cover Higgsfield art, don't build a second mechanism). If a judge types something genuinely novel, the Becoming card falls back to a themed static still — never a live 45s call, never a broken card.
 
@@ -193,7 +194,7 @@ Unchanged from v1 except where noted.
 
 | Layer | Choice |
 |---|---|
-| Frontend | **Vite + React + TS + Tailwind + shadcn** — matches the Lovable export; no SSR needed |
+| Frontend | **Next.js (App Router) + React + TS + Tailwind + shadcn** — this is what's actually on disk; earlier drafts said Vite, corrected here to match reality |
 | Backend | FastAPI, Pydantic v2, SQLAlchemy 2 async, `sse-starlette` |
 | Agents | LangGraph, single framework |
 | LLM | `gemini-3.6-flash` (intake, scout, coach) · `gemini-3.5-flash-lite` (appraiser, reflector) |
@@ -272,6 +273,15 @@ Three screens:
 /why     decision log — every item, its score breakdown, what it beat
 ```
 Dark, dense, instrument-panel. One accent colour for "the agent acted." Framer Motion `layout` so re-curation visibly animates.
+
+**§10a — `/twin` hero: true self / imagined self, in 3D (stretch, gated to H16, same discipline as §6/§2.4).** Two low-poly humanoid busts, distance between them driven directly by the existing `alignment` value from `self_model.py` — this is a new *rendering* of a number that already exists, not a new computation. As alignment rises, they move closer; as it falls, they drift apart.
+
+Build constraints, all hard:
+- **Source the model, never sculpt one tonight.** A free, pre-rigged low-poly bust (Sketchfab CC0/CC-BY — search "low poly human bust"), exported `.glb`, rendered with **react-three-fiber** (not vanilla Three.js — it integrates directly with the existing Vite+React stack).
+- **Stylized only, never photorealistic** — same rule as Higgsfield's rail in §6. Low-poly reads as intentional and aspirational; a realistic bust reads as uncanny and is slower to get right.
+- **No new `.env` entries.** The model is a static client-side asset. Zero API calls happen to render it.
+- **Never on `/today` or `/why`.** Those screens need to stay fast and dense for the counterfactual flip and decision log to land — a 3D scene there works against the exact thing that has to land with a judge. This lives on `/twin` only, optionally as static (non-data-driven) brand art on the landing page.
+- **WebGL fallback:** if `react-three-fiber`'s canvas fails to mount (weak GPU, driver issue on a venue laptop), fall back to a static rendered screenshot of the same asset. A blank canvas mid-demo is worse than a static image.
 
 ---
 
