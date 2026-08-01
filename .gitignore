@@ -7,3 +7,6 @@ __pycache__/
 .venv/
 outputs/
 agentic-ai-curator/
+hbtm-agentic-ai-curator/
+*-agentic-ai-curator/
+.tmp-awesome-design-md/

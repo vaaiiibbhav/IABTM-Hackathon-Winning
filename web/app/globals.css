@@ -46,75 +46,89 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-agent: var(--agent);
+  --color-agent-foreground: var(--agent-foreground);
 }
 
+/* PRAXIS — warm dark, instrument-panel. Light tokens kept for completeness
+   (system light mode / print) but the product ships dark-by-default: see
+   `className="dark"` on <html> in app/layout.tsx. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: oklch(0.98 0.004 80);
+  --foreground: oklch(0.2 0.006 80);
+  --card: oklch(1 0.004 80);
+  --card-foreground: oklch(0.2 0.006 80);
+  --popover: oklch(1 0.004 80);
+  --popover-foreground: oklch(0.2 0.006 80);
+  --primary: oklch(0.2 0.006 80);
+  --primary-foreground: oklch(0.98 0.004 80);
+  --secondary: oklch(0.94 0.006 80);
+  --secondary-foreground: oklch(0.2 0.006 80);
+  --muted: oklch(0.94 0.006 80);
+  --muted-foreground: oklch(0.48 0.008 80);
+  --accent: oklch(0.94 0.006 80);
+  --accent-foreground: oklch(0.2 0.006 80);
+  --destructive: oklch(0.577 0.22 27);
+  --border: oklch(0.88 0.008 80);
+  --input: oklch(0.88 0.008 80);
+  --ring: oklch(0.7 0.01 80);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.96 0.006 80);
+  --sidebar-foreground: oklch(0.2 0.006 80);
+  --sidebar-primary: oklch(0.2 0.006 80);
+  --sidebar-primary-foreground: oklch(0.98 0.004 80);
+  --sidebar-accent: oklch(0.94 0.006 80);
+  --sidebar-accent-foreground: oklch(0.2 0.006 80);
+  --sidebar-border: oklch(0.88 0.008 80);
+  --sidebar-ring: oklch(0.7 0.01 80);
+  /* the ONE reserved accent — fires only for "the agent acted" moments:
+     counterfactual flip reveal, a resolved intervention. Warm amber/gold. */
+  --agent: oklch(0.74 0.15 70);
+  --agent-foreground: oklch(0.18 0.02 70);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  /* IABTM brand base #2E2E2E ≈ oklch(0.22 0 0), warmed slightly (hue 75-85,
+     low chroma) instead of neutral zinc — this is the "warm dark" in §10. */
+  --background: oklch(0.16 0.006 75);
+  --foreground: oklch(0.94 0.008 80);
+  --card: oklch(0.225 0.006 75);
+  --card-foreground: oklch(0.94 0.008 80);
+  --popover: oklch(0.225 0.006 75);
+  --popover-foreground: oklch(0.94 0.008 80);
+  --primary: oklch(0.94 0.008 80);
+  --primary-foreground: oklch(0.2 0.006 75);
+  --secondary: oklch(0.29 0.008 75);
+  --secondary-foreground: oklch(0.94 0.008 80);
+  --muted: oklch(0.27 0.007 75);
+  --muted-foreground: oklch(0.68 0.012 75);
+  --accent: oklch(0.29 0.008 75);
+  --accent-foreground: oklch(0.94 0.008 80);
+  --destructive: oklch(0.704 0.19 22);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: oklch(0.6 0.02 75);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(0.19 0.006 75);
+  --sidebar-foreground: oklch(0.94 0.008 80);
+  --sidebar-primary: oklch(0.74 0.15 70);
+  --sidebar-primary-foreground: oklch(0.18 0.02 70);
+  --sidebar-accent: oklch(0.29 0.008 75);
+  --sidebar-accent-foreground: oklch(0.94 0.008 80);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.6 0.02 75);
+  /* the reserved "agent acted" accent — warm amber/gold, unused elsewhere */
+  --agent: oklch(0.74 0.15 70);
+  --agent-foreground: oklch(0.18 0.02 70);
 }
 
 @layer base {
@@ -126,5 +140,23 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .panel {
+    @apply rounded-lg border border-border bg-card;
+  }
+  .label-caps {
+    @apply text-[0.7rem] font-medium tracking-[0.08em] text-muted-foreground uppercase;
+  }
+  .score-mono {
+    @apply font-mono tabular-nums;
+  }
+  .instrument-grid {
+    background-image:
+      linear-gradient(to right, oklch(1 0 0 / 4%) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(1 0 0 / 4%) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 }

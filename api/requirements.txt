@@ -9,3 +9,6 @@ langgraph
 google-genai
 feedparser
 httpx
+alembic
+pytest
+pytest-asyncio

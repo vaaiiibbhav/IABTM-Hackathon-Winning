@@ -1,8 +1,9 @@
 {
-  "IABTM": 1.2,
-  "Farnam Street": 1.0,
-  "O'Reilly": 1.0,
-  "YouTube": 0.8,
-  "default": 1.0,
-  "floor": 0.5
+  "iambetterthanme.com": 1.2,
+  "iambetterthanme": 1.2,
+  "Farnam Street": 1.1,
+  "O'Reilly": 1.1,
+  "YouTube": 1.0,
+  "rss": 1.0,
+  "web": 0.8
 }
