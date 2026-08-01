@@ -1,129 +1,120 @@
-# PRAXIS — build order
+# PRAXIS — build order (v2, re-spec'd for the curator problem statement)
 
-Read `CLAUDE.md` first. Each phase has paste-ready Claude Code prompts and a hard acceptance test. **Do not start a phase until the previous phase's acceptance test passes.**
+> Read CLAUDE.md fully first — this file assumes it. Paste-ready Claude
+> Code prompts, hard acceptance tests. Don't start a phase until the
+> previous one's acceptance test passes.
 
-Lanes: **A** = agents (`api/agents/`) · **B** = backend (`api/engine/`, `api/routes/`, `api/models.py`) · **W** = web (`web/`) · **L** = lead (demo, pitch, scope)
-
----
-
-## PHASE −1 — TONIGHT, before you sleep (~90 min)
-
-This is the highest-leverage 90 minutes of the whole hackathon. Do not skip it to "save energy." Every item here is something that fails badly over venue wifi at 11am.
-
-- [ ] **3 × Gemini API keys** (three team Google accounts). Test one real call with `gemini-3.6-flash` and structured output. Confirm the model ID resolves on your key.
-- [ ] **3 × YouTube Data API v3 keys.** Enable the API in each GCP project. Test one `search.list`.
-- [ ] **Supabase project** created, Postgres connection string in hand, `?sslmode=require` tested from a laptop.
-- [ ] **Resend account**, API key, send one test email to a team phone. Use `onboarding@resend.dev` as sender — do not burn time on domain verification.
-- [ ] **Scaffold and push the repo now**: `create-next-app` (TS, Tailwind, App Router) + `shadcn init` + FastAPI skeleton + `uv sync` / `npm install` committed. Push `CLAUDE.md` and this file to the repo root. **Never run a cold `npm install` on venue wifi.**
-- [ ] `ollama pull llama3.1:8b` on one laptop.
-- [ ] Everyone clones and runs the scaffold successfully **before leaving home**.
-- [ ] Write `.env.example` with every key name. Share real values in a private channel.
+Lanes: **A** = agents (`api/agents/`) · **B** = backend (`api/engine/`, `api/routes/`, `api/models.py`) · **W** = web (`web/`) · **L** = lead (demo, pitch, scope, seeding)
 
 ---
 
-## PHASE 0 — H0→H1 · Contract lock (all four, same table, laptops half-shut)
+## PHASE −1 — before you build (do this once, not mid-build)
 
-Nobody writes feature code this hour. This hour is why you won't be in integration hell at hour 18.
+- [ ] **3 × Gemini API keys**, one real structured-output call tested against `gemini-3.6-flash`. Confirm the model ID resolves. `temperature`/`top_p`/`top_k` are deprecated on 3.x — don't pass them.
+- [ ] **3 × YouTube Data API v3 keys.** Test one `search.list`.
+- [ ] Check whether `iambetterthanme.com/blogs` or their podcast expose an RSS feed. If yes, note the URL — it's a zero-quota source.
+- [ ] **Supabase project**, connection string, `?sslmode=require` tested.
+- [ ] **Resend account**, test email sent to a phone.
+- [ ] `ollama pull llama3.1:8b` on one laptop — wifi insurance.
+- [ ] **MCPs**: `chrome-devtools`, `shadcn`, `context7` connected in the main build session (`claude mcp list` to confirm). Higgsfield MCP (`https://mcp.higgsfield.ai/mcp`) goes in a **separate, short-lived session only**, never the main one — 30+ tool schemas is too much context to carry through the whole build.
+- [ ] Repo root has `CLAUDE.md`, `BUILD_ORDER.md`, `web/`, `api/` — confirmed clean, no nested reference clones committed.
+- [ ] `.env.example` with every key name; real values shared privately.
 
-**Together, out loud, agree and write down:**
-1. The exact `GoalState` shape.
-2. The nine event types.
-3. The `PlanDiff` shape.
-4. Who owns which directory for the next 24 hours.
+---
 
-> **Claude Code prompt (run once, lead's machine):**
-> "Read CLAUDE.md. Create `api/schemas.py` with Pydantic v2 models for GoalSpec, Skill, SkillEdge, Milestone, Task, Resource, QuizItem, QuizResult, Event, PlanDiff, RiskState, TraceFrame, and GoalState. Then create `web/lib/types.ts` with TypeScript interfaces that mirror them exactly, field for field. Then create `web/lib/fixtures.ts` exporting a realistic complete GoalState for an 'AWS Solutions Architect in 10 weeks' learner with 6 skills, 3 milestones, 14 tasks, 4 plan diffs, and mid-range mastery values. Do not write any other code."
+## PHASE 0 — H0→H1 · Contract lock
 
-**Acceptance:** `web/lib/fixtures.ts` imports cleanly and the frontend lane can start immediately.
+Nobody writes feature code this hour.
+
+> **Claude Code prompt:** "Read CLAUDE.md fully. Create `api/schemas.py` with Pydantic v2 models: SelfSpec, Aspiration, Theme, Candidate, Decision, Signal, Intervention, Event, TraceFrame, RiskLikeState (Alignment/Momentum/Saturation/Drift), SelfState. Then `web/lib/types.ts` mirroring them field for field. Then `web/lib/fixtures.ts` exporting a realistic complete SelfState for a 'become a confident public speaker' user — 4 aspirations, 5 themes with varied depth/momentum/saturation, 8 candidates with score breakdowns, 3 decisions each showing a counterfactual, 2 interventions (one drift_proposal, one calibration). Do not write any other code."
+
+**Acceptance:** `fixtures.ts` imports cleanly. Frontend lane starts immediately.
 
 ---
 
 ## PHASE 1 — H1→H4 · Three lanes in parallel, all on mocks
 
 ### Lane B — data layer
-> "Read CLAUDE.md §2 and §7. Create `api/clock.py` exposing `now()` (real UTC + offset read from the clock table, cached 5s), `advance(days)`, and `reset()`. Then `api/models.py` with SQLAlchemy 2 async models for the full §7 schema, and `api/db.py` with session management. Write an Alembic migration. **Critical: no model may use `server_default=func.now()`; all timestamps are set by application code via `clock.now()`.** Add a unit test proving `advance(4)` moves `now()` forward exactly four days."
+> "Read CLAUDE.md §3 (I1) and §8. Create `api/clock.py` (`now()`, `advance(days)`, `reset()` — real UTC + stored offset, never `datetime.now()` anywhere else). Create `api/models.py` with the full §8 schema as SQLAlchemy 2 async models — timestamps set by application code via `clock.now()`, never `server_default=func.now()`. Alembic migration. Unit test proving `advance(4)` moves `now()` forward exactly four days."
 
-Then routes returning fixture data so the frontend can point at a real server by H2.
+Then routes returning fixture-shaped JSON so the frontend can point at a real server.
 
 ### Lane W — the whole UI against fixtures
-> "Read CLAUDE.md §10. Build the `/g/[goalId]` dashboard using only `web/lib/fixtures.ts` — no network calls. Components: PlanBoard (milestones with nested task cards showing kind icon, est_minutes, status, and a difficulty dial rendering p_success 0–1), MasteryHeatmap (skill grid, colour = mastery, opacity = confidence), RiskGauge (score + top 2 drivers as text), DiffTimeline (reverse-chron, each entry showing trigger, reasoning, and added/removed/moved counts), AgentTrace (collapsible bottom drawer). Dark instrument-panel aesthetic, one accent colour. Use Framer Motion `layout` on task cards so future insertions animate. Do not build a settings page, a nav bar, or a landing page."
+> "Read CLAUDE.md §10. Build three screens against `web/lib/fixtures.ts` only, no network calls: `/today` (bounded feed, each card flips to show its counterfactual side-by-side per §2 Moat 1, feed visibly ends — no infinite scroll), `/twin` (theme depth grid + Alignment/Momentum/Saturation/Drift tiles with driver text), `/why` (decision log, every score breakdown). Build ONE shared card component per §5a that renders interview steps, one-tap check-ins, and every intervention type (nudge/do_block/drift_proposal/calibration) — same shape everywhere. Warm dark, editorial aesthetic per IABTM's brand (`#2E2E2E` base), not generic dashboard chrome. Framer Motion `layout` on cards. No chat tab, no analytics tab."
 
-### Lane A — first three agents, CLI only
-> "Read CLAUDE.md §3 and §4. Create `api/agents/llm.py`: a thin Gemini client using `gemini-3.6-flash` and `gemini-3.5-flash-lite`, with native structured output against Pydantic schemas, one retry on validation failure, and an Ollama `llama3.1:8b` fallback behind the same interface. **Do not pass temperature, top_p, or top_k — they are deprecated on Gemini 3.x.** Then `intake.py` (messy text → GoalSpec), `architect.py` (GoalSpec → skills + prerequisite edges + criticality, must produce a valid DAG — reject and retry if cyclic), and `planner.py` (skills + hours_per_week + deadline → milestones + dated tasks, respecting prerequisite order and never exceeding hours_per_week in any week). Add a `python -m api.agents.cli 'some goal'` entrypoint that prints the result as JSON. No FastAPI, no database."
+### Lane A — first agents, CLI only
+> "Read CLAUDE.md §3, §4, §5, §5a. Create `api/agents/llm.py`: Gemini client, `gemini-3.6-flash`/`gemini-3.5-flash-lite`, native structured output, one retry on validation failure, Ollama fallback behind the same interface. No temperature/top_p/top_k. Then `interviewer.py` (drives the 3-5 step structured onboarding interview, one question at a time) and `intake.py` (interview answers → SelfSpec). Add `python -m api.agents.cli` testable via a scripted set of answers, prints SelfSpec as JSON. No FastAPI, no database yet."
 
-**H4 acceptance:** Lane A prints a valid plan for a goal nobody hardcoded. Lane W renders a full dashboard from fixtures. Lane B serves fixture-shaped JSON over HTTP.
+**H4 acceptance:** Lane A prints a valid SelfSpec from scripted interview answers. Lane W renders all three screens from fixtures, including the counterfactual flip. Lane B serves fixture-shaped JSON over HTTP.
 
 ---
 
 ## PHASE 2 — H4→H8 · First real end-to-end
 
-> **Lane A+B together:** "Wire `api/agents/graph.py` as a LangGraph with the three entry points in CLAUDE.md §4. Implement `POST /api/goals` running intake → architect → planner, persisting to Postgres. Implement `GET /api/goals/{id}` returning the full GoalState in one query batch. Implement `GET /api/goals/{id}/stream` as SSE emitting a TraceFrame per node with node name, status, elapsed ms, and a one-line summary."
+> **Lane A+B together:** "Wire `api/agents/graph.py` as a LangGraph with entry points `create_self`, `curate_today`, `log_signal`, `answer_check_in`, `tick` (CLAUDE.md §5). Implement `POST /api/self/interview/start` and `/answer` running `interviewer` → `intake`, persisting to Postgres on the final step. Implement `GET /api/self/{id}` returning full SelfState in one query batch. Implement `GET /api/self/{id}/stream` as SSE emitting a TraceFrame per node."
 
-> **Lane W:** "Replace fixtures with real fetches. Build `/` — a single large textarea, three example-goal chips, and a submit that opens the SSE stream and renders trace frames live while the plan generates."
+> **Lane W:** "Replace fixtures with real fetches. Wire the interview card to `/api/self/interview/*` — real multi-step round trips, not a big paste. On the last step, redirect to `/today` and open the SSE stream."
 
-**H8 acceptance — the milestone that matters:** someone who has not seen the code types a goal into a browser and gets a real skill graph and plan on screen in under 30 seconds. **If this is not true at H8, cut scope immediately, do not push on.**
+**H8 acceptance — the milestone that matters:** someone who hasn't seen the code answers the interview in a browser and lands on a real self-model in under 30 seconds. **If this isn't true at H8, cut scope, don't push on.**
 
 ---
 
-## PHASE 3 — H8→H12 · Resources, quizzes, mastery
+## PHASE 3 — H8→H12 · Candidates, scoring, the counterfactual
 
-> **Lane A:** "Read CLAUDE.md §6. Implement `integrations/youtube.py` (search.list + videos.list, key rotation across 3 keys on 403, best-fit by duration vs task.est_minutes), `integrations/grounding.py` (Gemini with google_search tool, extracting real URLs from groundingMetadata — never from model memory), and `integrations/verify.py` (async HEAD, 5s timeout, follow redirects). Then `agents/curator.py` running all tasks concurrently via `asyncio.gather` with a semaphore of 8. Cache every result in the resources table keyed by normalized query. On quota exhaustion across all keys, degrade to grounding-only and log the path used."
+> **Lane A:** "Read CLAUDE.md §6a (source), §4 (trust_weight), §7. Implement `integrations/youtube.py` (search+videos, key rotation on 403), `integrations/rss.py` (feedparser, including IABTM's own feed if one exists), `integrations/grounding.py` (Gemini + google_search tool, real URLs from groundingMetadata only), `integrations/verify.py` (async HEAD, 5s timeout). Create `config/sources.json` — the trust-tier registry, credibility weights per source. Then `agents/scout.py` (theme → candidate pool from all three sources, concurrent via `asyncio.gather`, semaphore 8) and `agents/appraiser.py` (candidate → structured metadata + embedding via Gemini's embedding endpoint, batched, flash-lite). Cache everything keyed by normalized query."
 
-> **Lane A:** "Implement `agents/assessor.py`: given a skill, generate 5 MCQ items tagged with that skill_id and difficulty 1–3 using flash-lite; and a grade function returning per-item correctness."
+> **Lane B:** "Read CLAUDE.md §4. Implement `engine/score.py` exactly as spec'd — `growth_score` with `trust_weight`, and `engagement_score` as the adversary. Pure Python, zero LLM, zero I/O beyond reading `config/sources.json`. Unit tests: growth_score penalizes what engagement_score rewards; it can go negative; trust_weight scales correctly. Then `agents/curator.py` (pure Python): assemble the bounded daily set, and for each item compute what the top engagement-scored candidate would have been — that's the counterfactual pair."
 
-> **Lane B:** "Read CLAUDE.md §5. Implement `engine/mastery.py` and `engine/zpd.py` exactly as specified, as pure functions with no I/O. Write unit tests: mastery rises with correct answers, confidence rises with n, decay pulls toward the prior after 21 days, and next_task picks the task closest to 0.78 predicted success. Then wire `POST /api/tasks/{id}/quiz` to grade, update alpha/beta, and return mastery_delta per skill."
-
-**H12 acceptance:** open goal → real verified YouTube links on task cards → take a quiz → mastery heatmap visibly changes.
+**H12 acceptance:** open `/today` → real verified candidates with real score breakdowns → every card flips to a real counterfactual, not a mock.
 
 ---
 
 ## PHASE 4 — H12→H16 · The closed loop (this is the whole project)
 
-> **Lane B:** "Read CLAUDE.md §5. Implement `engine/events.py` with the five trigger rules and `engine/risk.py` with the weighted score returning top 2 drivers. Every trigger evaluation writes an events row."
+> **Lane B:** "Read CLAUDE.md §4, §5. Implement `engine/self_model.py` (per-theme depth, momentum, saturation — Beta-Bernoulli, 21-day decay), `engine/drift.py`, `engine/events.py` (SATURATED/DRIFT_DETECTED/STALLED/BREAKTHROUGH/BUDGET_EXCEEDED). Every trigger evaluation writes an `events` row."
 
-> **Lane A:** "Implement `agents/replanner.py`. Input: a triggering event plus current GoalState. Output: a validated PlanDiff — added tasks, removed tasks, moved dates, plus a one-paragraph `reasoning` written for the learner, not the developer. **Python must validate before persisting**: no task before its prerequisites, no week over hours_per_week, no removal of a task other tasks depend on. Invalid proposals retry once then fall back to the deterministic rule 'insert one remedial task, push milestone by 2 days'. Every accepted diff writes a plan_diffs row."
+> **Lane A:** "Implement `agents/reflector.py` (one-tap check-in → signal → self_model update) and `agents/coach.py` (state → nudge/do_block/drift_proposal/calibration, human-written copy, per the escalation ladder). Wire `POST /api/signal` and `POST /api/interventions/{id}/resolve`."
 
-> **Lane B:** "Implement `engine/scheduler.py`: APScheduler every 60s real-time, using `clock.now()`. Each tick applies mastery decay, recomputes risk, evaluates triggers, and fires nudges. Implement `agents/coach.py` producing tier, channel and copy per the escalation ladder, and `integrations/email.py` sending via Resend. Tier 4 (risk > 0.85) must not send a nudge — it creates a pending scope-renegotiation proposal that `POST /api/goals/{id}/renegotiate` accepts or rejects."
+> **Lane B:** "Implement `engine/scheduler.py`: APScheduler every 60s real-time on `clock.now()` — decay, recompute risk-like state, evaluate triggers, fire interventions. `integrations/email.py` via Resend for nudge-tier only."
 
-> **Lane W:** "Wire DiffTimeline to `/diffs` and make new entries animate in. Wire RiskGauge to `/risk`. Add the scope-renegotiation approval card."
+> **Lane W:** "Wire the shared card component to real check-ins and interventions. A `SATURATED` event must visibly stop the feed and show the Do Block (§2 Moat 2) — no new candidates until acted on. A `drift_proposal` must be a real approve/reject card that re-curates the feed on accept."
 
-**H16 acceptance — the demo's spine:** fail a quiz in the browser → remedial tasks animate into the plan → milestone shifts → a new diff entry appears with human-readable reasoning. This works or you have no project.
+**H16 acceptance — the demo's spine:** consume several items on one theme with no action → feed stops, Do Block appears, unprompted. That single moment, working live, is the project.
 
 ---
 
 ## 🔒 H16 — FEATURE FREEZE
 
-Lead calls it. Anything not working now gets **cut, not fixed**. Apply the cut-line in CLAUDE.md §14.
+Lead calls it. Anything not working now gets **cut, not fixed** — see cut-line below.
 
 ---
 
-## PHASE 5 — H16→H19 · Demo infrastructure
+## PHASE 5 — H16→H19 · Demo infrastructure + asset batch
 
-> **Lane B:** "Implement `POST /api/demo/advance` (shifts the clock, runs a scheduler tick synchronously, returns every event, nudge and diff produced), `POST /api/demo/reset`, and `POST /api/demo/seed` for named scenarios."
+> **Lane B:** "Implement `POST /api/demo/advance` (shifts clock, runs a scheduler tick synchronously, returns every event/intervention produced), `POST /api/demo/reset`, `POST /api/demo/seed {scenario}`."
 
-> **Lane W:** "Build `/demo`: advance clock by 1/3/7 days, reset, seed scenario, force a specific event. Keyboard shortcuts so the presenter never hunts for a button on stage."
+> **Lane L:** "Write `seed/demo_user.py` — a user three weeks into a real aspiration with realistic history: several decisions with counterfactuals, one saturated theme close to triggering a Do Block, one drift signal building. Never demo empty."
 
-> **Lane L:** "Write `seed/demo_learner.py` creating a learner three weeks into an AWS SAA goal with realistic history — 60% completion, a 5-day streak, one previously failed quiz, two existing plan diffs, mid-range mastery with two weak skills. The dashboard must never be demoed empty."
+> **Separate Claude Code session, Higgsfield MCP connected (not the main session):** run the asset-generation prompt from CLAUDE.md §6 — hero video, brand marks, per-theme cover art, and the "Becoming" reveal for the 4-5 seed scenarios you're already pre-warming YouTube for. Save to `web/public/assets/`. Disconnect the MCP from that session afterward; don't reconnect it in the main build session.
 
-Also this phase: loading states, empty states, error toasts. **Pre-warm the YouTube cache** for 4–5 goals a judge might plausibly type.
+Also this phase: loading/empty/error states. Pre-warm YouTube+RSS cache for the same 4-5 demo goals the Higgsfield batch covers — one list, not two.
 
 ---
 
 ## PHASE 6 — H19→H21 · Deploy and triage
 
-Deploy web to Vercel, api to Railway. Verify SSE survives the proxy — **if it doesn't, demo from localhost and stop fighting it.** Fix only bugs on the §11 demo path. Every other bug is now a known limitation you mention proudly in the roadmap slide.
+Deploy web to Vercel, api to Railway. Verify SSE survives the proxy — if not, demo from localhost. Fix only bugs on the demo path (§11 of CLAUDE.md). Everything else is a roadmap slide, not a bug.
 
 ---
 
 ## PHASE 7 — H21→H23 · Rehearse
 
-- Run the full 7-minute script **five times**, timed. Rotate who presents until two people can do it.
-- **Record a complete successful run as video.** Non-negotiable. This is your insurance against the venue's wifi.
-- Screenshot every key state as slide backup.
-- Run the AIA-PAL 8-criterion evaluation (CLAUDE.md §12) against your own system and put the numbers on a slide — especially your response times against their 90–148s. Almost no hackathon team shows an evaluation table. This one slide separates you from the field.
-- **Validate the mastery estimator on synthetic learners (~30 lines, 20 minutes — do this before building the eval slide).** Simulate 200 learners with known true per-skill mastery, generate response sequences from it, run them through `engine/mastery.py`, and plot estimated vs. true mastery as n grows. This is the same sanity check the pyBKT paper runs. It turns "we built a Bayesian mastery model" into "here is proof it converges," and it costs almost nothing. The convergence plot goes on the eval slide.
-- **Do NOT attempt a real benchmark run** (ASSIST09 / ASSIST17 / EdNet) during the hackathon. Those datasets assume a fixed, expert-authored concept taxonomy; your skills are LLM-generated per goal, so there is no mapping — and a rushed comparison you lose to published BKT numbers is worse than no comparison at all. Put it on the roadmap slide instead: *"next step is validation against the standard knowledge-tracing benchmarks."* That reads as rigour, not as a gap.
-- Drill Q&A: *how is this different from ChatGPT plus a to-do list · how do you know mastery is real · what stops the LLM hallucinating a bad plan · cost at scale · who pays.*
+- Run the full demo script (CLAUDE.md §11) five times, timed.
+- **Record a complete successful run as backup video.**
+- **Validate the depth/mastery estimator on synthetic users (~30 lines, 20 min).** Simulate 200 users with known true per-theme depth, generate signal sequences, run through `engine/self_model.py`, plot estimated vs. true depth as n grows. Same sanity check pyBKT runs on itself. Convergence plot goes on the eval slide.
+- **Do NOT attempt a real knowledge-tracing benchmark** (ASSIST09/17, EdNet) — no taxonomy mapping exists for LLM-generated themes. Roadmap slide line instead: "next step is validation against standard benchmarks." Reads as rigour, not a gap.
+- Run the AIA-PAL 8-criterion evaluation against your own system (CLAUDE.md §12) — especially your response time vs. their reported 90–148s. Put it on a slide.
+- Drill Q&A from CLAUDE.md §12.
 
 ---
 
@@ -131,10 +122,21 @@ Deploy web to Vercel, api to Railway. Verify SSE survives the proxy — **if it 
 
 ---
 
+## Cut-line (exact order, apply at H16 if behind)
+
+1. Higgsfield asset batch → fall back to static placeholder images, keep the Becoming card structure
+2. Landing-page GSAP pass (Lenis + ScrollTrigger) → skip, ship the plain landing page
+3. Growth Hive (§2.4) → skip entirely, use the Q&A fallback line
+4. Calibration asks (§5a #3) → keep only the onboarding interview + one-tap check-ins
+5. RSS source → YouTube + grounding only
+6. Email delivery → in-app intervention only
+
+**Never cut: the counterfactual flip, the refusal (Do Block), or the demo console.** Those three are the project.
+
 ## Three ways this dies, and the guard for each
 
-| Failure | Guard |
+| Risk | Guard |
 |---|---|
-| YouTube quota gone by hour 20 | 3 rotating keys, aggressive cache, grounding-only fallback, pre-warmed demo goals |
-| H8 end-to-end slips | Hard stop and cut scope. Do not "push through" — that is how teams arrive at hour 22 with nothing demoable |
-| Everyone builds, nobody rehearses | Lead owns the clock and is not on a build lane after H16 |
+| YouTube quota exhausted mid-demo | 3 rotating keys, aggressive caching, grounding-only fallback, pre-warmed demo goals |
+| H8 slips | Hard stop, cut scope immediately — don't push through |
+| Two Claude Code sessions collide in one directory | One session per lane (§13 of CLAUDE.md), never two in `api/agents/` or `api/engine/` at once |

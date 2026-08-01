@@ -106,10 +106,11 @@ def growth_score(item, self_model, history) -> tuple[float, dict]:
     actionability = item.has_concrete_practice                            # 0/0.5/1
     novelty     = 1 - overlap_with_recent(item, history)
     effort_fit  = fits_available_time(item.minutes, self_model.today_budget)
+    trust_weight = source_credibility(item.source)                        # 0.5..1.2, see config/sources.json
 
     saturation_penalty = consumed_without_action(item.theme, history)     # 0..1
 
-    score = (0.30*alignment + 0.20*readiness + 0.20*actionability
+    score = trust_weight * (0.30*alignment + 0.20*readiness + 0.20*actionability
              + 0.15*novelty + 0.15*effort_fit) - 0.40*saturation_penalty
     return score, locals()   # breakdown is rendered in the UI
 
@@ -119,6 +120,8 @@ def engagement_score(item) -> float:      # the adversary, deliberately crude
 ```
 
 Two properties to defend on stage: `growth_score` **penalizes** what `engagement_score` rewards (view count, brevity, clickbait), and it can go **negative** — which is what triggers the refusal in §2.
+
+**`trust_weight` — the one idea worth taking from `agentic-ai-curator`'s source registry, written fresh against our own config.** A flat JSON file, `config/sources.json`, mapping source → credibility multiplier — `1.2` for IABTM's own experts/artists/podcast, `1.0` for established creators, `0.8` for an unverified upload, `0.5` floor. This is what lets IABTM's own catalog earn top billing in the feed without hardcoding a special case for them — they're just the highest-trust source, transparently, in a file anyone can read.
 
 Also in `engine/`:
 - `self_model.py` — per-theme depth (Beta-Bernoulli over engagement + reflection signals, decaying over 21 days), momentum, saturation, drift score
@@ -289,7 +292,7 @@ Dark, dense, instrument-panel. One accent colour for "the agent acted." Framer M
 
 ## 12. Positioning
 
-Cite **Tebourbi et al., Procedia CS 265 (2025)** (LangGraph/CrewAI adaptive learning; reports 90–148s agent latency) and **OpenMAIC** (THU-MAIC, JCST 2026) as the state of the art — both are session-scoped tutors with no cross-session model of the person. **OpenMAIC is AGPL-3.0: read it, close the tab, write your own.**
+Cite **Tebourbi et al., Procedia CS 265 (2025)** (LangGraph/CrewAI adaptive learning; reports 90–148s agent latency), **OpenMAIC** (THU-MAIC, JCST 2026), and **`agentic-ai-curator`** (aylin-jarrahnezhad, CrewAI-based AI-news digest) as the reference architectures we visibly extend. All three are the closest published/public relatives; all three are missing the thing the brief actually asks for. AIA-PAL and OpenMAIC are session-scoped tutors with no cross-session model of the person. `agentic-ai-curator` is the closest architectural shape by far — fetch → normalize → dedupe → score → cluster → summarize maps almost directly onto our scout → appraiser → scorer → curator — but it scores content quality in the abstract (relevance, importance, novelty) with no model of a specific person at all, and its own README admits those scoring dimensions are unvalidated. **OpenMAIC is AGPL-3.0: read it, close the tab, write your own. `agentic-ai-curator` carries no visible license: same rule, harder edge — read its pipeline shape and its weighted trust-tier source registry idea, write our own scoring against our own schema, never fork its CrewAI codebase as the submission's foundation.** The one concrete thing worth taking: its `config/source_registry.json` pattern — per-source credibility weights — adapted into our own scoring so IABTM's own experts and artists can be weighted highest without hardcoding favoritism.
 
 Learning-science grounding: Zuo et al. 2023 (scaffolding meta-analysis), Tabak & Reiser 2022 (scaffolding), Vygotsky's ZPD for the readiness band, Corbett & Anderson 1995 (BKT) for the depth estimator's lineage.
 
