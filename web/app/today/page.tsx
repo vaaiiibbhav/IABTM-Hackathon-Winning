@@ -409,7 +409,7 @@ export default function TodayPage() {
                                 onClick={() => toggleFlip(item.candidate.id)}
                                 className="text-[10px] font-mono text-zinc-500 hover:text-zinc-300"
                               >
-                                [Why Cured?]
+                                [Why curated?]
                               </button>
                             )}
                           </div>
