@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+sqlalchemy[asyncio]>=2
+asyncpg
+sse-starlette
+apscheduler
+langgraph
+google-genai
+feedparser
+httpx
