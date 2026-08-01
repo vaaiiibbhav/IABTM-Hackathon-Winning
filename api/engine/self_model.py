@@ -5,7 +5,7 @@ Implements Beta-Bernoulli knowledge tracing, momentum tracking, and saturation.
 
 import math
 from datetime import datetime, timezone
-from typing import Any, dict, List
+from typing import Any, List
 from api.models import DbTheme
 
 

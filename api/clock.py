@@ -34,3 +34,8 @@ def reset() -> datetime:
     global _virtual_offset_seconds
     _virtual_offset_seconds = 0
     return now()
+
+
+def get_offset() -> int:
+    """The raw virtual offset in seconds, for display/debugging."""
+    return _virtual_offset_seconds

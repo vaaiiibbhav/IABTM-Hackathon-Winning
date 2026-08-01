@@ -2,6 +2,8 @@
 
 Field names/types match the Pydantic contract. IDs are UUID4 strings (client-side
 default, not a DB server_default — consistent with the Pydantic `id: str` fields).
+Class names are Db-prefixed (DbUser, DbTheme, ...) to stay distinct from the
+Pydantic contract classes of the same name in api/schemas.py.
 
 I1: no `server_default=func.now()` anywhere. Timestamp columns are plain nullable
 DateTime columns; application code sets them explicitly via `clock.now()` at
@@ -13,8 +15,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -26,7 +27,7 @@ class Base(DeclarativeBase):
     pass
 
 
-class User(Base):
+class DbUser(Base):
     __tablename__ = "users"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -36,7 +37,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
-class SelfSpec(Base):
+class DbSelfSpec(Base):
     __tablename__ = "self_specs"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -47,19 +48,19 @@ class SelfSpec(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
-class Aspiration(Base):
+class DbAspiration(Base):
     __tablename__ = "aspirations"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
     self_spec_id: Mapped[str] = mapped_column(ForeignKey("self_specs.id"))
     text: Mapped[str] = mapped_column(String)
     status: Mapped[str] = mapped_column(String)  # active | drifting | retired
-    embedding: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    embedding: Mapped[list | None] = mapped_column(JSON, nullable=True)  # §4: plain float array, no vector DB
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     retired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
-class Theme(Base):
+class DbTheme(Base):
     __tablename__ = "themes"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -75,7 +76,7 @@ class Theme(Base):
     # not a stored column — deliberately omitted here, see schemas.py:62.
 
 
-class Candidate(Base):
+class DbCandidate(Base):
     __tablename__ = "candidates"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -89,11 +90,11 @@ class Candidate(Base):
     has_practice: Mapped[bool] = mapped_column(Boolean)
     view_count: Mapped[int] = mapped_column(Integer)
     verified: Mapped[bool] = mapped_column(Boolean)
-    embedding: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    embedding: Mapped[list | None] = mapped_column(JSON, nullable=True)  # §4: plain float array, no vector DB
     appraised_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
-class Decision(Base):
+class DbDecision(Base):
     __tablename__ = "decisions"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -101,14 +102,14 @@ class Decision(Base):
     candidate_id: Mapped[str] = mapped_column(ForeignKey("candidates.id"))
     served_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     growth_score: Mapped[float] = mapped_column(Float)
-    breakdown: Mapped[dict] = mapped_column(JSONB)
+    breakdown: Mapped[dict] = mapped_column(JSON)
     counterfactual_id: Mapped[str | None] = mapped_column(
         ForeignKey("candidates.id"), nullable=True
     )
     counterfactual_score: Mapped[float | None] = mapped_column(Float, nullable=True)
 
 
-class Signal(Base):
+class DbSignal(Base):
     __tablename__ = "signals"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -120,7 +121,7 @@ class Signal(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
-class Intervention(Base):
+class DbIntervention(Base):
     __tablename__ = "interventions"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
@@ -128,22 +129,22 @@ class Intervention(Base):
     type: Mapped[str] = mapped_column(String)  # nudge|do_block|drift_proposal|calibration|budget_stop
     tier: Mapped[int] = mapped_column(Integer)
     body: Mapped[str] = mapped_column(String)
-    state: Mapped[dict] = mapped_column(JSONB)
+    state: Mapped[dict] = mapped_column(JSON)
     sent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
-class Event(Base):
+class DbEvent(Base):
     __tablename__ = "events"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     type: Mapped[str] = mapped_column(String)  # SATURATED|DRIFT_DETECTED|STALLED|BREAKTHROUGH|BUDGET_EXCEEDED
-    payload: Mapped[dict] = mapped_column(JSONB)
+    payload: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
-class ClockRow(Base):
+class DbClock(Base):
     """DB-backed mirror of api/clock.py's offset (§8). Not read/written yet —
     clock.py is process-local until Postgres is wired up in Phase 2."""
 

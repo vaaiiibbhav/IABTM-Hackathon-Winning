@@ -15,7 +15,6 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import JSONB
 
 from alembic import op
 
@@ -51,6 +50,7 @@ def upgrade() -> None:
         sa.Column("self_spec_id", sa.String(), sa.ForeignKey("self_specs.id"), nullable=False),
         sa.Column("text", sa.String(), nullable=False),
         sa.Column("status", sa.String(), nullable=False),
+        sa.Column("embedding", sa.JSON(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("retired_at", sa.DateTime(timezone=True), nullable=True),
     )
@@ -81,6 +81,7 @@ def upgrade() -> None:
         sa.Column("has_practice", sa.Boolean(), nullable=False),
         sa.Column("view_count", sa.Integer(), nullable=False),
         sa.Column("verified", sa.Boolean(), nullable=False),
+        sa.Column("embedding", sa.JSON(), nullable=True),
         sa.Column("appraised_at", sa.DateTime(timezone=True), nullable=True),
     )
 
@@ -91,7 +92,7 @@ def upgrade() -> None:
         sa.Column("candidate_id", sa.String(), sa.ForeignKey("candidates.id"), nullable=False),
         sa.Column("served_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("growth_score", sa.Float(), nullable=False),
-        sa.Column("breakdown", JSONB(), nullable=False),
+        sa.Column("breakdown", sa.JSON(), nullable=False),
         sa.Column("counterfactual_id", sa.String(), sa.ForeignKey("candidates.id"), nullable=True),
         sa.Column("counterfactual_score", sa.Float(), nullable=True),
     )
@@ -114,7 +115,7 @@ def upgrade() -> None:
         sa.Column("type", sa.String(), nullable=False),
         sa.Column("tier", sa.Integer(), nullable=False),
         sa.Column("body", sa.String(), nullable=False),
-        sa.Column("state", JSONB(), nullable=False),
+        sa.Column("state", sa.JSON(), nullable=False),
         sa.Column("sent_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("resolved_at", sa.DateTime(timezone=True), nullable=True),
     )
@@ -124,7 +125,7 @@ def upgrade() -> None:
         sa.Column("id", sa.String(), primary_key=True),
         sa.Column("user_id", sa.String(), sa.ForeignKey("users.id"), nullable=False),
         sa.Column("type", sa.String(), nullable=False),
-        sa.Column("payload", JSONB(), nullable=False),
+        sa.Column("payload", sa.JSON(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
 

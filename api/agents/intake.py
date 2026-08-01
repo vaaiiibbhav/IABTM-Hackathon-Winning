@@ -48,6 +48,29 @@ def get_initial_beta_parameters(experience_answer: str) -> tuple[float, float]:
         return 2.0, 2.0
 
 
+def _offline_intake_stub(aspiration_text: str) -> IntakeSynthesisResponse:
+    """Deterministic fallback when Gemini and Ollama are both unreachable (no key /
+    no matching local model). Keeps onboarding demoable offline instead of 500ing —
+    ponytail: two generic themes off the aspiration text, not real synthesis.
+    """
+    slug_base = "-".join(aspiration_text.lower().split()[:4]) or "aspiration"
+    return IntakeSynthesisResponse(
+        summary=f"Working toward: {aspiration_text}.",
+        themes=[
+            IntakeThemeSchema(
+                name="Fundamentals",
+                slug=f"{slug_base}-fundamentals",
+                description=f"Core knowledge needed for: {aspiration_text}",
+            ),
+            IntakeThemeSchema(
+                name="Deliberate Practice",
+                slug=f"{slug_base}-practice",
+                description=f"Applied practice reps toward: {aspiration_text}",
+            ),
+        ],
+    )
+
+
 def synthesize_intake(
     aspiration_text: str,
     budget_answer: str,
@@ -66,7 +89,11 @@ def synthesize_intake(
         "themes (knowledge areas) they must study to achieve this aspiration. Keep the theme names concise."
     )
 
-    return generate_structured_output(prompt, IntakeSynthesisResponse, model_tier="hard")
+    try:
+        return generate_structured_output(prompt, IntakeSynthesisResponse, model_tier="hard")
+    except RuntimeError:
+        # Both Gemini and Ollama unavailable — keep onboarding demoable offline.
+        return _offline_intake_stub(aspiration_text)
 
 
 def create_initial_spec(

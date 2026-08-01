@@ -21,6 +21,7 @@ def test_clock_now():
 
 def test_clock_reset():
     """Test resetting the virtual clock offset."""
+    clock.reset()  # isolate from other tests' offset (module-level global state)
     clock.advance(10)
     assert clock.get_offset() == 10 * 24 * 3600
     

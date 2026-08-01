@@ -125,11 +125,12 @@ Deploy web to Vercel, api to Railway. Verify SSE survives the proxy — if not, 
 ## Cut-line (exact order, apply at H16 if behind)
 
 1. Higgsfield asset batch → fall back to static placeholder images, keep the Becoming card structure
-2. Landing-page GSAP pass (Lenis + ScrollTrigger) → skip, ship the plain landing page
-3. Growth Hive (§2.4) → skip entirely, use the Q&A fallback line
-4. Calibration asks (§5a #3) → keep only the onboarding interview + one-tap check-ins
-5. RSS source → YouTube + grounding only
-6. Email delivery → in-app intervention only
+2. 3D true-self/imagined-self visualization (§10a) → fall back to the plain theme-depth grid on /twin
+3. Landing-page GSAP pass (Lenis + ScrollTrigger) → skip, ship the plain landing page
+4. Growth Hive (§2.4) → skip entirely, use the Q&A fallback line
+5. Calibration asks (§5a #3) → keep only the onboarding interview + one-tap check-ins
+6. RSS source → YouTube + grounding only
+7. Email delivery → in-app intervention only
 
 **Never cut: the counterfactual flip, the refusal (Do Block), or the demo console.** Those three are the project.
 

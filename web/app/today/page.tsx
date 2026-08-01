@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Brain, Compass, RefreshCw, Layers, ShieldAlert, Sparkles, CheckSquare, Square, ExternalLink, HelpCircle, FastForward } from "lucide-react";
 import ElicitationCard from "@/components/ElicitationCard";
 import TracePanel from "@/components/TracePanel";

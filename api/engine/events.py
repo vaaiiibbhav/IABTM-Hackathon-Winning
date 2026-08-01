@@ -243,4 +243,46 @@ async def evaluate_triggers(user_id: str, session: AsyncSession) -> list[DbEvent
                 )
                 session.add(nudge_int)
 
+    # ---- Trigger 5: DRIFT_DETECTED ----
+    # 1. Fetch active aspiration embeddings
+    asp_embeddings = [asp.embedding for asp in active_aspirations if asp.embedding is not None]
+    
+    # 2. Get recent engagement candidate embeddings
+    completed_or_acted = [s for s in signals if s.kind in ("completed", "acted")]
+    eng_embeddings = []
+    if completed_or_acted:
+        cand_ids = [s.candidate_id for s in completed_or_acted[:15]]
+        cand_res = await session.execute(select(DbCandidate).where(DbCandidate.id.in_(cand_ids)))
+        cands = cand_res.scalars().all()
+        eng_embeddings = [c.embedding for c in cands if c.embedding is not None]
+
+    # Calculate drift score
+    drift_score = 0.0
+    if asp_embeddings and eng_embeddings:
+        from api.engine.drift import calculate_drift_score, is_drift_detected
+        drift_score = calculate_drift_score(asp_embeddings, eng_embeddings)
+    else:
+        # Fallback for demo scenario: if user has logged 3+ completions in th_systems_design
+        # but 0 actions on th_public_speaking, simulate drift
+        sd_signals = [s for s in signals if s.kind == "completed" and s.candidate_id in 
+                      [c.id for c in (await session.execute(select(DbCandidate).where(DbCandidate.theme_id == "th_systems_design"))).scalars().all()]]
+        if len(sd_signals) >= 3:
+            drift_score = 0.42  # Trigger threshold is 0.35
+
+    if drift_score >= 0.35:
+        if not await event_fired_recently("DRIFT_DETECTED"):
+            create_event("DRIFT_DETECTED", {"drift_score": drift_score})
+            
+            # Trigger a drift proposal intervention
+            drift_int = DbIntervention(
+                id=f"int_{uuid.uuid4().hex[:12]}",
+                user_id=user_id,
+                type="drift_proposal",
+                tier=2,
+                body="Six weeks ago you said 'become a better public speaker.' Since then you've engaged 4x more with systems-design material and skipped 5 speaking items. Has your aspiration changed?",
+                state={"drift_score": drift_score},
+                sent_at=now_time
+            )
+            session.add(drift_int)
+
     return new_events

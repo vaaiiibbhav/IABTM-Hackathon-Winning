@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Brain, Compass, Sparkles, AlertCircle, RefreshCw, BarChart2, Zap, ShieldAlert, Award } from "lucide-react";
 import { fixtureSelfState } from "@/lib/fixtures";
 import type { SelfState } from "@/lib/types";
+import ThreeVectorSpace from "@/components/ThreeVectorSpace";
 
 export default function SelfTwinPage() {
   const [userId, setUserId] = useState<string | null>(null);
@@ -54,13 +55,9 @@ export default function SelfTwinPage() {
     );
   }
 
-  // Compute aggregate metrics from selfState for the 4-tile grid
-  const alignmentVal = 1 - selfState.drift_score; // Inverse of drift is alignment
-  
-  // Calculate average momentum and saturation across themes
-  const avgMomentum = selfState.themes.reduce((acc, t) => acc + t.momentum, 0) / (selfState.themes.length || 1);
-  const avgSaturation = selfState.themes.reduce((acc, t) => acc + t.saturation, 0) / (selfState.themes.length || 1);
-  const driftVal = selfState.drift_score;
+  // §10: Alignment/Momentum/Saturation/Drift come straight off risk_like_state —
+  // each tile's value AND its driver text, not a locally re-derived approximation.
+  const { alignment, momentum, saturation, drift } = selfState.risk_like_state;
 
   return (
     <div className="flex-1 bg-zinc-950 p-6 md:p-12 text-zinc-100 flex flex-col">
@@ -87,6 +84,20 @@ export default function SelfTwinPage() {
               [Toggle Mode]
             </button>
           </div>
+        </div>
+
+        {/* 3D Identity Space Visualizer */}
+        <div className="bg-[#141414] border border-zinc-900 rounded-xl p-6 relative overflow-hidden">
+          <div className="flex items-center gap-2 text-zinc-400 mb-2 border-b border-zinc-900/60 pb-3">
+            <Brain className="h-4 w-4 text-indigo-400" />
+            <span className="text-[10px] font-mono font-bold tracking-wider uppercase">3D Identity Trajectory (Dual-Vector)</span>
+          </div>
+          <div className="h-[320px] w-full flex items-center justify-center">
+            <ThreeVectorSpace themes={selfState.themes} driftScore={selfState.risk_like_state.drift.value} />
+          </div>
+          <p className="text-[9px] font-mono text-zinc-500 mt-2 text-center">
+            Visualising the gap vector (target minus current). Theme orbits spin relative to momentum.
+          </p>
         </div>
 
         {/* 1. Stated Aspirations Section */}
@@ -122,12 +133,10 @@ export default function SelfTwinPage() {
             </div>
             <div>
               <span className="text-2xl font-mono font-bold text-indigo-400">
-                {Math.round(alignmentVal * 100)}%
+                {Math.round(alignment.value * 100)}%
               </span>
               <p className="text-[9px] font-mono text-zinc-500 mt-1 leading-normal">
-                {alignmentVal > 0.7 
-                  ? "Stated aspirations match consumed materials." 
-                  : "Stated aspirations diverging from readings."}
+                {alignment.driver}
               </p>
             </div>
           </div>
@@ -140,12 +149,10 @@ export default function SelfTwinPage() {
             </div>
             <div>
               <span className="text-2xl font-mono font-bold text-emerald-400">
-                {avgMomentum.toFixed(2)}
+                {momentum.value.toFixed(2)}
               </span>
               <p className="text-[9px] font-mono text-zinc-500 mt-1 leading-normal">
-                {avgMomentum > 0.5 
-                  ? "High action-taking speed. Habit loop is strong." 
-                  : "Low action-taking speed. Add practice check-ins."}
+                {momentum.driver}
               </p>
             </div>
           </div>
@@ -158,12 +165,10 @@ export default function SelfTwinPage() {
             </div>
             <div>
               <span className="text-2xl font-mono font-bold text-rose-400">
-                {avgSaturation.toFixed(2)}
+                {saturation.value.toFixed(2)}
               </span>
               <p className="text-[9px] font-mono text-zinc-500 mt-1 leading-normal">
-                {avgSaturation >= 0.7 
-                  ? "Danger of research loop saturation. Act now." 
-                  : "Safe. Balanced intake with real execution."}
+                {saturation.driver}
               </p>
             </div>
           </div>
@@ -176,12 +181,10 @@ export default function SelfTwinPage() {
             </div>
             <div>
               <span className="text-2xl font-mono font-bold text-amber-400">
-                {driftVal.toFixed(2)}
+                {drift.value.toFixed(2)}
               </span>
               <p className="text-[9px] font-mono text-zinc-500 mt-1 leading-normal">
-                {driftVal >= 0.35 
-                  ? "Identity shift detected. update proposal pending." 
-                  : "Stated goals match consumption profile."}
+                {drift.driver}
               </p>
             </div>
           </div>
