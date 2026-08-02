@@ -123,6 +123,7 @@ async def seed_demo_scenario(db: AsyncSession = Depends(get_db)):
         created_at=clock.now()
     )
     db.add(spec)
+    await db.flush()
 
     # Seed Aspirations
     asp = DbAspiration(

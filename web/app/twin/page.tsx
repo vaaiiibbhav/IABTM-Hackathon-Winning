@@ -178,7 +178,7 @@ export default function SelfTwinPage() {
               <BarChart2 className="h-3.5 w-3.5" />
               <span className="label-caps">Beta-Bernoulli knowledge depth</span>
             </div>
-            <span className="text-[0.65rem] font-mono text-muted-foreground/70">Prior: B(1.0, 1.0)</span>
+            <span className="text-xs font-mono text-muted-foreground">Prior: B(1.0, 1.0)</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -187,24 +187,24 @@ export default function SelfTwinPage() {
               const depthPct = Math.round(theme.depth * 100);
 
               return (
-                <div key={theme.id} className="border border-border bg-secondary/30 rounded-lg p-4 space-y-3.5">
+                <div key={theme.id} className="border border-border bg-secondary/30 rounded-xl p-5 space-y-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="text-sm font-semibold text-foreground">{theme.name}</h4>
-                      <span className="text-[0.65rem] font-mono text-muted-foreground/70 block mt-0.5">{theme.slug}</span>
+                      <h4 className="text-base font-semibold text-foreground">{theme.name}</h4>
+                      <span className="text-xs font-mono text-muted-foreground block mt-0.5">{theme.slug}</span>
                     </div>
-                    <span className="score-mono text-xs font-semibold text-foreground">{depthPct}% depth</span>
+                    <span className="score-mono text-sm font-bold text-emerald-400">{depthPct}% depth</span>
                   </div>
 
                   {/* Visual Progress Bar */}
-                  <div className="space-y-1">
-                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                  <div className="space-y-1.5">
+                    <div className="h-2.5 w-full bg-secondary rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-agent/70 rounded-full transition-all duration-500"
+                        className="h-full bg-emerald-500 rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                         style={{ width: `${depthPct}%` }}
                       />
                     </div>
-                    <div className="flex items-center justify-between text-[0.6rem] font-mono text-muted-foreground/70">
+                    <div className="flex items-center justify-between text-[0.7rem] font-mono text-muted-foreground">
                       <span>Beginner</span>
                       <span>Intermediate</span>
                       <span>Mastery</span>
@@ -212,18 +212,18 @@ export default function SelfTwinPage() {
                   </div>
 
                   {/* Behind-the-scenes math data */}
-                  <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
-                    <div className="bg-background/40 p-2 rounded">
-                      <span className="block text-[0.6rem] text-muted-foreground/70 uppercase">Alpha</span>
-                      <span className="score-mono text-xs text-foreground">α = {theme.alpha.toFixed(2)}</span>
+                  <div className="grid grid-cols-3 gap-2 border-t border-border pt-4">
+                    <div className="bg-background/40 p-2.5 rounded-lg border border-border/30">
+                      <span className="block text-[0.7rem] text-zinc-400 font-semibold uppercase">Alpha</span>
+                      <span className="score-mono text-sm font-bold text-foreground">α = {theme.alpha.toFixed(2)}</span>
                     </div>
-                    <div className="bg-background/40 p-2 rounded">
-                      <span className="block text-[0.6rem] text-muted-foreground/70 uppercase">Beta</span>
-                      <span className="score-mono text-xs text-foreground">β = {theme.beta.toFixed(2)}</span>
+                    <div className="bg-background/40 p-2.5 rounded-lg border border-border/30">
+                      <span className="block text-[0.7rem] text-zinc-400 font-semibold uppercase">Beta</span>
+                      <span className="score-mono text-sm font-bold text-foreground">β = {theme.beta.toFixed(2)}</span>
                     </div>
-                    <div className="bg-background/40 p-2 rounded">
-                      <span className="block text-[0.6rem] text-muted-foreground/70 uppercase">Formula</span>
-                      <span className="score-mono text-xs text-muted-foreground">α/(α+β)</span>
+                    <div className="bg-background/40 p-2.5 rounded-lg border border-border/30">
+                      <span className="block text-[0.7rem] text-zinc-400 font-semibold uppercase">Formula</span>
+                      <span className="score-mono text-xs font-semibold text-muted-foreground">α/(α+β)</span>
                     </div>
                   </div>
                 </div>
@@ -256,14 +256,14 @@ function MetricTile({
   const toneBorder = hot && hotTone === "destructive" ? "border-destructive/30" : hot && hotTone === "agent" ? "border-agent/30" : "border-border";
 
   return (
-    <div className={cn("panel p-4 flex flex-col justify-between min-h-32 border", toneBorder)}>
-      <div className="flex items-center justify-between border-b border-border pb-2 mb-2 text-muted-foreground">
-        <span className="label-caps">{label}</span>
+    <div className={cn("panel p-5 flex flex-col justify-between min-h-36 border shadow-lg", toneBorder)}>
+      <div className="flex items-center justify-between border-b border-border pb-2.5 mb-3 text-muted-foreground">
+        <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400">{label}</span>
         {icon}
       </div>
       <div>
-        <span className={cn("score-mono text-xl font-semibold", toneText)}>{value}</span>
-        <p className="text-xs text-muted-foreground mt-1 leading-normal">{driver}</p>
+        <span className={cn("score-mono text-3xl font-extrabold", toneText)}>{value}</span>
+        <p className="text-xs md:text-sm font-medium text-zinc-300 mt-2 leading-relaxed">{driver}</p>
       </div>
     </div>
   );

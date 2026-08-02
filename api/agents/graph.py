@@ -81,6 +81,7 @@ async def intake_node(state: AgentGraphState) -> AgentGraphState:
             created_at=self_spec.created_at
         )
         db_session.add(db_spec)
+        await db_session.flush()
 
         db_asp = DbAspiration(
             id=aspiration.id,

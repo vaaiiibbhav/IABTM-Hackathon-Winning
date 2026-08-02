@@ -13,9 +13,12 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 if not DATABASE_URL:
     # Use SQLite relative to workspace root
     DATABASE_URL = "sqlite+aiosqlite:///praxis.db"
-elif DATABASE_URL.startswith("postgresql://"):
-    # SQLAlchemy requires postgresql+asyncpg for async execution
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+else:
+    if DATABASE_URL.startswith("postgresql://"):
+        # SQLAlchemy requires postgresql+asyncpg for async execution
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+    # asyncpg takes ssl=, not the psycopg2-style sslmode= query param
+    DATABASE_URL = DATABASE_URL.replace("sslmode=require", "ssl=require")
 
 # Create async engine
 # For SQLite, we turn off pool check_same_thread because we handle session scopes

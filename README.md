@@ -4,6 +4,8 @@
 
 > *"Today's algorithms optimize for attention. Praxis optimizes for human potential."*
 
+**Stack:** Next.js (App Router) · FastAPI · LangGraph · Gemini + Ollama (`llama3.1:8b`) fallback · SQLite (dev) / Postgres (prod)
+
 ---
 
 ## 1. The Core Architecture: Dual-Vector Identity Engine
@@ -57,13 +59,14 @@ If a user skips stated goal items (e.g. Public Speaking) and heavily consumes ot
 ## 4. Tech Stack
 
 - **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS, Three.js, Lucide Icons, Framer Motion.
-- **Backend**: FastAPI Async, SQLAlchemy 2.0 Async, SQLite/Postgres.
+- **Backend**: FastAPI Async, SQLAlchemy 2.0 Async, SQLite (local dev) / Postgres (production, e.g. Supabase or Neon).
 - **Agents Framework**: LangGraph state machine orchestrating 8 specialized nodes:
   - `interviewer` & `intake` (onboarding)
   - `scout` (concurrent ingestion from YouTube API, RSS, and Gemini Search Grounding)
   - `appraiser` (metadata extraction & `text-embedding-004` generation)
   - `scorer` & `curator` (arithmetic scoring and counterfactual grouping)
   - `reflector` & `coach` (check-in processing and intervention updates)
+- **LLM**: Gemini (`gemini-3.6-flash` / `gemini-3.5-flash-lite`) as primary, with a local **Ollama (`llama3.1:8b`)** fallback so onboarding still works offline or without API keys.
 - **Virtual clock (`clock.py`)**: Enables manual offset advances (`/api/demo/advance`) to showcase saturation blocks and drift updates instantly.
 
 ---
@@ -71,16 +74,20 @@ If a user skips stated goal items (e.g. Public Speaking) and heavily consumes ot
 ## 5. Getting Started
 
 ### Backend Setup
-1. Setup Python virtual environment:
+1. Set up the Python virtual environment:
    ```bash
    python -m venv .venv
    .venv\Scripts\activate  # Windows
    pip install -r api/requirements.txt aiosqlite pytest
    ```
-2. Configure `.env` from `.env.example`.
-3. Run FastAPI:
+2. Copy `.env.example` to `.env` and fill in the keys you have. Leaving `DATABASE_URL` unset is fine for local dev — the backend falls back to a local SQLite file (`praxis.db`) automatically.
+3. (Optional but recommended) Pull the local Ollama fallback model, used when Gemini is unreachable or unconfigured:
    ```bash
-   uvicorn api.main:app --reload
+   ollama pull llama3.1:8b
+   ```
+4. Run FastAPI. **Port must be 8001** — the frontend's dev proxy (`web/next.config.ts`) forwards `/api/*` to `http://127.0.0.1:8001`, and env vars are only loaded via `--env-file`:
+   ```bash
+   uvicorn api.main:app --reload --port 8001 --env-file .env
    ```
 
 ### Frontend Setup
@@ -94,3 +101,5 @@ If a user skips stated goal items (e.g. Public Speaking) and heavily consumes ot
    npm run dev
    ```
 3. Open [http://localhost:3000](http://localhost:3000). Click **Advance 5 Days** in the sidebar to simulate saturation and test the refusal system.
+
+> If you change the backend's port, update the `destination` in `web/next.config.ts`'s `rewrites()` to match — otherwise every `/api/*` call from the frontend will silently 404 against the Next.js dev server instead of reaching FastAPI.

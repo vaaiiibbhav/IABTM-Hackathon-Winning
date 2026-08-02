@@ -2,7 +2,7 @@
 
 import React, { useRef, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, OrbitControls } from "@react-three/drei";
+import { useGLTF, OrbitControls, Html, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 
 interface TwinVisualizationProps {
@@ -56,14 +56,15 @@ function ProceduralMannequins({ alignmentValue }: { alignmentValue: number }) {
 }
 
 // 2. GLTF model loader
-function Bust({ color, emissive, ...props }: { color: string; emissive: string; [key: string]: unknown }) {
+function Bust({ color, emissive, ...props }: { color: string; emissive: string; [key: string]: any }) {
   const { scene } = useGLTF("/assets/models/bust.glb");
   const clonedScene = React.useMemo(() => scene.clone(), [scene]);
 
   React.useEffect(() => {
     clonedScene.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        child.material = new THREE.MeshPhongMaterial({
+      if ((child as any).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = new THREE.MeshPhongMaterial({
           color: new THREE.Color(color),
           emissive: new THREE.Color(emissive),
           emissiveIntensity: 0.6,
@@ -119,11 +120,21 @@ function AnimatedBusts({ alignmentValue }: { alignmentValue: number }) {
       {/* Current Self Bust: Cyan/Blue */}
       <group ref={currentRef} position={[-distance / 2, -0.5, 0]}>
         <Bust color="#3b82f6" emissive="#1d4ed8" />
+        <Html position={[0, 1.2, 0]} center style={{ pointerEvents: 'none' }}>
+          <div className="px-3 py-1 rounded bg-blue-950/90 border border-blue-700 text-xs font-mono font-bold text-blue-400 whitespace-nowrap shadow-lg tracking-wider uppercase">
+            Current Self
+          </div>
+        </Html>
       </group>
 
       {/* Target Self Bust: Gold/Orange */}
       <group ref={targetRef} position={[distance / 2, -0.5, 0]}>
         <Bust color="#f59e0b" emissive="#b45309" />
+        <Html position={[0, 1.2, 0]} center style={{ pointerEvents: 'none' }}>
+          <div className="px-3 py-1 rounded bg-amber-950/90 border border-amber-700 text-xs font-mono font-bold text-amber-400 whitespace-nowrap shadow-lg tracking-wider uppercase">
+            Target Self
+          </div>
+        </Html>
       </group>
 
       {/* Connection line if not perfectly overlapping */}
@@ -145,11 +156,14 @@ function AnimatedBusts({ alignmentValue }: { alignmentValue: number }) {
 
 export default function TwinVisualization({ alignmentValue }: TwinVisualizationProps) {
   return (
-    <div className="w-full h-full min-h-[300px] relative">
+    <div className="w-full h-full min-h-[320px] relative">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
         <ambientLight intensity={0.4} />
         <pointLight position={[5, 5, 5]} intensity={1.5} color="#6366f1" />
         <pointLight position={[-5, 5, -5]} intensity={1.5} color="#f59e0b" />
+        
+        {/* Particle sparkles effect for premium aesthetics */}
+        <Sparkles count={40} scale={4} size={1.2} speed={0.3} color="#818cf8" />
         
         {/* Render procedural low-poly mannequins instantly, swapping to detailed GLTF busts when loaded */}
         <Suspense fallback={<ProceduralMannequins alignmentValue={alignmentValue} />}>
@@ -160,18 +174,18 @@ export default function TwinVisualization({ alignmentValue }: TwinVisualizationP
         <OrbitControls enableZoom={true} enablePan={false} maxPolarAngle={Math.PI / 2} />
       </Canvas>
 
-      {/* Visual Overlay Legend */}
-      <div className="absolute bottom-2 left-4 flex gap-4 text-[9px] font-mono text-zinc-500 bg-zinc-950/80 p-2 rounded border border-zinc-900 z-10">
-        <div className="flex items-center gap-1.5">
-          <span className="h-2.5 w-1.5 rounded bg-blue-500 block"></span>
-          <span>Current Self</span>
+      {/* Visual Overlay Legend - larger font, clean layout, glowing border */}
+      <div className="absolute bottom-4 left-4 flex flex-col sm:flex-row gap-3 sm:gap-6 text-xs md:text-sm font-mono text-zinc-400 bg-zinc-950/90 p-4 rounded-xl border border-zinc-800/80 shadow-2xl z-10">
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-blue-500 block shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span>
+          <span className="font-semibold text-zinc-300">Current Self</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="h-2.5 w-1.5 rounded bg-amber-500 block"></span>
-          <span>Target Self (Aspirations)</span>
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-amber-500 block shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+          <span className="font-semibold text-zinc-300">Target Self (Aspirations)</span>
         </div>
-        <div className="flex items-center gap-1.5 text-zinc-400">
-          <span>Alignment: {Math.round(alignmentValue * 100)}%</span>
+        <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-zinc-800 pt-2 sm:pt-0 sm:pl-4 text-indigo-400">
+          <span className="font-bold">Alignment: {Math.round(alignmentValue * 100)}%</span>
         </div>
       </div>
     </div>

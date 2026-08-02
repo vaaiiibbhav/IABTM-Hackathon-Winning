@@ -92,6 +92,14 @@ export default function WhyPage() {
                   <h3 className="mt-0.5 text-base font-semibold text-foreground">
                     {item.candidate.title}
                   </h3>
+                  <a
+                    href={item.candidate.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1.5 inline-flex items-center gap-1 text-xs font-mono text-agent hover:underline"
+                  >
+                    Open Link ↗
+                  </a>
                 </div>
                 <div className="shrink-0 text-right">
                   <div className="label-caps">growth score</div>

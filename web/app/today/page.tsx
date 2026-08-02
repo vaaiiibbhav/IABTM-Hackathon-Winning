@@ -324,13 +324,13 @@ export default function TodayPage() {
             </div>
           ) : (
             <div className="space-y-6">
-              {feed.map((item) => {
+              {feed.map((item, index) => {
                 const isFlipped = flippedCards[item.candidate.id] || false;
                 const isCompleted = completedItems[item.candidate.id] || false;
 
                 return (
                   <div
-                    key={item.candidate.id}
+                    key={`${item.candidate.id}-${index}`}
                     className="relative group transition-all duration-300"
                   >
                     {/* Perspective wrapper for 3D card flip effect */}
@@ -402,8 +402,16 @@ export default function TodayPage() {
                                   Take Action
                                 </button>
                               )}
+                              <a
+                                href={item.candidate.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-900/70 px-3 py-1.5 text-xs text-zinc-300 font-mono transition-colors"
+                              >
+                                View Content ↗
+                              </a>
                             </div>
-                            
+
                             {item.counterfactual_candidate && (
                               <button
                                 onClick={() => toggleFlip(item.candidate.id)}
