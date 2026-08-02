@@ -7,7 +7,8 @@
 **Stack:** Next.js (App Router) · FastAPI · LangGraph · Gemini + Ollama (`llama3.1:8b`) fallback · SQLite (dev) / Postgres (prod)
 
 ---
-<img width="1089" height="1585" alt="Screenshot_2-8-2026_5526_localhost" src="https://github.com/user-attachments/assets/68d3fdbb-1157-422a-940d-9f28bc122863" />
+<img width="1087" height="1135" alt="Screenshot_2-8-2026_5541_localhost" src="https://github.com/user-attachments/assets/526fdb12-79c2-4407-8878-b17d244941d3" />
+
 
 
 
