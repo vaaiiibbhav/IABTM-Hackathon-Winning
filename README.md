@@ -7,7 +7,8 @@
 **Stack:** Next.js (App Router) · FastAPI · LangGraph · Gemini + Ollama (`llama3.1:8b`) fallback · SQLite (dev) / Postgres (prod)
 
 ---
-<img width="1101" height="1595" alt="iabtm" src="https://github.com/user-attachments/assets/4cc79bbb-8621-456c-bf9e-4a8672df3fff" />
+<img width="1089" height="1585" alt="Screenshot_2-8-2026_5526_localhost" src="https://github.com/user-attachments/assets/68d3fdbb-1157-422a-940d-9f28bc122863" />
+
 
 
 ## 1. The Core Architecture: Dual-Vector Identity Engine
